@@ -38,6 +38,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  char *arg = strtok(args, " ");
+  if(arg == NULL){
+	  printf("too few arguments.\n");
+	  return 1;
+  }
+  int num = atoi(arg);
+  cpu_exec(num);
+  printf("OK");
+  return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -48,6 +60,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+  { "si", "后面可以跟参数N, 让程序单步执行N条指令后暂停执行, 当N没有给出时, 缺省为1", cmd_si },
 
 };
 
