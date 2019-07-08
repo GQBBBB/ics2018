@@ -41,12 +41,11 @@ static int cmd_help(char *args);
 static int cmd_si(char *args) {
   char *arg = strtok(args, " ");
   if(arg == NULL){
-	  printf("too few arguments.\n");
-	  return 1;
+	  cpu_exec(1);
+  } else {
+	  cpu_exec(atoi(arg));
   }
-  int num = atoi(arg);
-  cpu_exec(num);
-  printf("OK");
+  printf("OK\n");
   return 0;
 }
 
