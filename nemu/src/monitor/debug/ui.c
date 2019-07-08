@@ -52,16 +52,16 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   char *arg = strtok(args, " ");
   if(arg == NULL) {
-	  printf("请输入参数\n  r : 打印寄存器状态\n  w : 打印监视点信息");
+	  printf("请输入参数\n  r : 打印寄存器状态\n  w : 打印监视点信息\n");
   } else if(strcmp(arg, "r") == 0) {
-	  printf("eax is %x\n",cpu.eax);
-	  printf("ecx is %x\n",cpu.ecx);
-	  printf("edx is %x\n",cpu.edx);
-	  printf("ebx is %x\n",cpu.ebx);
-	  printf("esp is %x\n",cpu.esp);
-	  printf("ebp is %x\n",cpu.ebp); 
-	  printf("esi is %x\n",cpu.esi);
-	  printf("edi is %x\n",cpu.edi);
+	  printf("EAX : %x\n", cpu.eax);
+	  printf("EDX : %x\n", cpu.edx);
+	  printf("ECX : %x\n", cpu.ecx);
+	  printf("EBX : %x\n", cpu.ebx);
+	  printf("EBP : %x\n", cpu.ebp);
+	  printf("ESI : %x\n", cpu.esi); 
+	  printf("EDI : %x\n", cpu.edi);
+	  printf("ESP : %x\n", cpu.esp);
   } else if(strcmp(arg, "w") == 0){
 	  //等待完成
   }
