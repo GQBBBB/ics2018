@@ -40,12 +40,32 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
   char *arg = strtok(args, " ");
-  if(arg == NULL){
+  if(arg == NULL) {
 	  cpu_exec(1);
   } else {
 	  cpu_exec(atoi(arg));
   }
-  printf("OK\n");
+  printf("OK!\n");
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(args, " ");
+  if(arg == NULL) {
+	  printf("请输入参数\n  r : 打印寄存器状态\n  w : 打印监视点信息");
+  } else if(strcmp(arg, "r") == 0) {
+	  printf("eax is %x\n",cpu.eax);
+	  printf("ecx is %x\n",cpu.ecx);
+	  printf("edx is %x\n",cpu.edx);
+	  printf("ebx is %x\n",cpu.ebx);
+	  printf("esp is %x\n",cpu.esp);
+	  printf("ebp is %x\n",cpu.ebp); 
+	  printf("esi is %x\n",cpu.esi);
+	  printf("edi is %x\n",cpu.edi);
+  } else if(strcmp(arg, "w") == 0){
+	  //等待完成
+  }
+  printf("OK!\n");
   return 0;
 }
 
@@ -60,6 +80,7 @@ static struct {
 
   /* TODO: Add more commands */
   { "si", "后面可以跟参数N, 让程序单步执行N条指令后暂停执行, 当N没有给出时, 缺省为1", cmd_si },
+  { "info", "后面跟参数r,打印寄存器状态;后面跟参数w,打印监视点信息", cmd_info},
 
 };
 
