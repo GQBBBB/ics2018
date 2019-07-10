@@ -53,6 +53,7 @@ static int cmd_info(char *args) {
   char *arg = strtok(args, " ");
   if(arg == NULL) {
 	  printf("请输入参数\n  r : 打印寄存器状态\n  w : 打印监视点信息\n");
+	  return 0;
   } else if(strcmp(arg, "r") == 0) {
 	  printf("EAX : %x\n", cpu.eax);
 	  printf("EDX : %x\n", cpu.edx);
@@ -69,6 +70,32 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_x(char *args) {
+	char *arg = strtok(args, " ");
+	if(arg == NULL){
+		printf("请输入参数N！\n");
+	    return 0;
+	}
+	int  n = atoi(arg);
+	char *EXPR = strtok(NULL, " ");
+	if(EXPR == NULL){
+		printf("请输入内存起始地址！\n");
+		return 0;
+	}
+	char *str;
+	vaddr_t addr = strtol(EXPR, &str, 16);
+	for(int i = 0; i < n; i++){
+		uint32_t data = vaddr_read(addr + i * 4, 4);
+		printf("0x%08x	", addr + i * 4);
+		for(int j = 0; j < 4; j++){
+	        printf("0x%02x	" , data & 0xff);
+	        data = data >> 8;
+		}
+		printf("\n");
+	}
+	return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -81,6 +108,7 @@ static struct {
   /* TODO: Add more commands */
   { "si", "后面可以跟参数N, 让程序单步执行N条指令后暂停执行, 当N没有给出时, 缺省为1", cmd_si },
   { "info", "后面跟参数r,打印寄存器状态;后面跟参数w,打印监视点信息", cmd_info},
+  { "x", "x N EXPR,求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
 
 };
 
