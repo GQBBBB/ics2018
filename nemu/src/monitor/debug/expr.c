@@ -5,12 +5,19 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
+
+bool check_parentheses(int p ,int q);
+int dominant_operator(int p , int q);
+int operator_precedence(int op);
+uint32_t eval(int p, int q);
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256,
+  TK_EQ = 257,
 
   /* TODO: Add more token types */
-  , TK_INT
+  TK_10 = 258
 };
 
 static struct rule {
@@ -26,7 +33,7 @@ static struct rule {
   {"\\/", '/'},         // div
   {"\\(", '('},           // (
   {"\\)", ')'},           // )
-  {"^[1-9]\\d*|0$", TK_INT}, // 十进制正整数
+  {"[1-9]\\d*", TK_10}, // 十进制正整数
 
 
   {" +", TK_NOTYPE},    // spaces
@@ -85,9 +92,13 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+ 
         switch (rules[i].token_type) {
-          default: TODO();
+	      case TK_NOTYPE: break;
+          default: strncpy(tokens[nr_token].str,  substr_start, substr_len);
+				   tokens[nr_token].type = rules[i].token_type;
+				   nr_token++;
+				   break;
         }
 
         break;
@@ -110,7 +121,101 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  uint32_t result = eval(0, nr_token - 1);
 
-  return 0;
+  return result;
+}
+
+bool check_parentheses(int p ,int q){
+    int tag = 0;
+    for(int i = p; i <= q; i++){    
+		if(tokens[i].type == '(')
+		   	tag++;
+	    else if(tokens[i].type == ')')
+		   	tag--;
+		if((tag < 0) || (tag == 0 && i < q))
+			return false; // (4 + 3)) * ((2 - 1), 4 + 3 * (2 - 1)
+	}                              
+	if( tag != 0 )
+	   	return false;   
+	return true;                   
+} 
+
+int dominant_operator(int p , int q){
+    int domin = p, left = 0, flag = 0;
+    for(int i = p; i <= q; i++){
+		if(tokens[i].type == '('){
+			left += 1;
+			i++;
+		    while(1){
+				if(tokens[i].type == '(')
+				   	left += 1;
+				else if(tokens[i].type == ')')
+				   	left --;
+			    i++;
+				if(left == 0)
+				    break;
+			}  
+			if(i > q)
+				break;
+		}      
+	    else if(tokens[i].type == TK_10)
+		   	continue;
+		else if(operator_precedence(tokens[i].type) >= flag){
+	        flag = operator_precedence(tokens[i].type);
+			domin = i;
+	    }      
+	}          
+	return domin;
+}       
+
+int operator_precedence(int op){
+	if(op == 257) // '=='
+		return 7;
+    else if(op == '+' || op == '-') // '+', '-'
+		return 4;
+	else if(op == '*' || op == '/' || op == '%') // '*', '/', '%'
+		return 3;
+	else 
+		return 0;
+}
+
+uint32_t eval(int p, int q) {
+    if (p > q) {
+	    /* Bad expression */
+		return -1;
+	}
+	else if (p == q) {
+		/* Single token.
+		 * For now this token should be a number.
+		 * Return the value of the number.                         
+		 */
+		return atoi(tokens[p].str);
+	}
+	else if (check_parentheses(p, q) == true) {
+		/* The expression is surrounded by a matched pair of parentheses.
+		 * If that is the case, just throw away the parentheses.
+		 */
+		return eval(p + 1, q - 1);
+	}
+	else {
+		/* We should do more things here. */
+		int op = dominant_operator(p , q);
+		uint32_t val1 = eval(p, op - 1);
+	    uint32_t val2 = eval(op + 1, q);
+		switch (tokens[op].type) {
+		    case '+': return val1 + val2;
+			case '-': return val1 - val2;
+		    case '*': return val1 * val2;
+		    case '/': if(val2 == 0)
+						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
+					  else
+						  return val1 / val2;
+		    case '%': if(val2 == 0)
+						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
+					  else
+						  return val1 % val2;
+			default: assert(0);
+		}
+	}
 }
