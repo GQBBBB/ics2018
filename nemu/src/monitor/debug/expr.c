@@ -162,6 +162,7 @@ int dominant_operator(int p , int q){
 			}  
 			if(i > q)
 				break;
+			printf("i=%d\n", i);
 		}
 	    else if(tokens[i].type == TK_10){
 		   	continue;
