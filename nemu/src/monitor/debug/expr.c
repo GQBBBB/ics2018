@@ -131,7 +131,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_parentheses(int p ,int q){
-    int tag = 0;
+    int tag = 0, flag = 1;
     for(int i = p; i <= q; i++){    
 		if(tokens[i].type == '(')
 		   	tag++;
@@ -140,10 +140,12 @@ bool check_parentheses(int p ,int q){
         if(tag < 0)
 			panic("Error: 括号错误！\n");
 		if(tag == 0 && i < q)
-			return false;
+			flag = 0;
 	}                              
-	if( tag != 0 )
-	   	return false;   
+	if(tag != 0)
+	   	panic("Error: 括号错误！\n");
+    if(flag == 0)
+	    return false;	
 	return true;                   
 } 
 
