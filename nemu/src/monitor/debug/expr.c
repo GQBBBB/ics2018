@@ -99,7 +99,6 @@ static bool make_token(char *e) {
           default: strncpy(tokens[nr_token].str,  substr_start, substr_len);
 				   tokens[nr_token].type = rules[i].token_type;
 				   nr_token++;
-				   printf("=========\n%s\n======\n", tokens[nr_token-1].str);
 				   break;
         }
 
@@ -136,7 +135,7 @@ bool check_parentheses(int p ,int q){
 	    else if(tokens[i].type == ')')
 		   	tag--;
 		if((tag < 0) || (tag == 0 && i < q))
-			return false; // (4 + 3)) * ((2 - 1), 4 + 3 * (2 - 1)
+			return false; // 括号错误：(4 + 3)) * ((2 - 1),没有用括号包裹整个表达式： 4 + 3 * (2 - 1)
 	}                              
 	if( tag != 0 )
 	   	return false;   
@@ -206,9 +205,9 @@ uint32_t eval(int p, int q) {
 		uint32_t val1 = eval(p, op - 1);
 	    uint32_t val2 = eval(op + 1, q);
 		switch (tokens[op].type) {
-		    case '+': return val1 + val2;
-			case '-': return val1 - val2;
-		    case '*': return val1 * val2;
+		    case '+': printf("'+', %d\n", val1 + val2); return val1 + val2;
+			case '-': printf("'-', %d\n", val1 - val2); return val1 - val2;
+		    case '*': printf("'*', %d\n", val1 * val2); return val1 * val2;
 		    case '/': if(val2 == 0)
 						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
 					  else
