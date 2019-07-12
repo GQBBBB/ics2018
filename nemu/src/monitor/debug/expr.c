@@ -122,6 +122,8 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
 
+  for(int i = 0; i< nr_token; i++)
+	  printf("tokens[%d]: %s\n", i, tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
   uint32_t result = eval(0, nr_token - 1);
 
@@ -217,7 +219,7 @@ uint32_t eval(int p, int q) {
 						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
 					  else
 						  return val1 % val2;
-			default: printf("op=%d, val1=%d, val2=%d", op, val1, val2); assert(0);
+			default: printf("op=%d, val1=%d, val2=%d\n", op, val1, val2); assert(0);
 		}
 	}
 }
