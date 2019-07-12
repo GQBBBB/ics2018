@@ -131,7 +131,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_parentheses(int p ,int q){
-    int tag = 0;
+    int tag = 0;printf("check:%d, %d\n", p, q);
     for(int i = p; i <= q; i++){    
 		if(tokens[i].type == '(')
 		   	tag++;
@@ -146,7 +146,7 @@ bool check_parentheses(int p ,int q){
 } 
 
 int dominant_operator(int p , int q){
-    int domin = p, left = 0, flag = 0;printf("%d, %d\n", p, q);
+    int domin = p, left = 0, flag = 0;printf("domin:%d, %d\n", p, q);
     for(int i = p; i <= q; i++){
 		if(tokens[i].type == '('){
 			left += 1;
@@ -204,7 +204,8 @@ uint32_t eval(int p, int q) {
 		/* The expression is surrounded by a matched pair of parentheses.
 		 * If that is the case, just throw away the parentheses.
 		 */
-		return eval(p + 1, q - 1);printf("==: %d, %d",p + 1, q-1);
+	    printf("==: %d, %d",p + 1, q-1);
+	    return eval(p + 1, q - 1);
 	}
 	else {
 		/* We should do more things here. */
