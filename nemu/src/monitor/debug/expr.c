@@ -219,7 +219,7 @@ uint32_t eval(int p, int q) {
 						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
 					  else
 						  return val1 % val2;
-			default: printf("op=%d, val1=%d, val2=%d\n", op, val1, val2); assert(0);
+			default: printf("(tokens[%d].type)=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2); assert(0);
 		}
 	}
 }
