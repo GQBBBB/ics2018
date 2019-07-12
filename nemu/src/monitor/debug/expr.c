@@ -205,6 +205,7 @@ uint32_t eval(int p, int q) {
 	else {
 		/* We should do more things here. */
 		int op = dominant_operator(p , q);
+		printf("主操作符:tokens[%d]=%s\n", op, tokens[op].str);
 		uint32_t val1 = eval(p, op - 1);
 	    uint32_t val2 = eval(op + 1, q);
 		switch (tokens[op].type) {
@@ -219,7 +220,7 @@ uint32_t eval(int p, int q) {
 						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
 					  else
 						  return val1 % val2;
-			default: printf("tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2); assert(0);
+			default: printf("Error: tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2); assert(0);
 		}
 	}
 }
