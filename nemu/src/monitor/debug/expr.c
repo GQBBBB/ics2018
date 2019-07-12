@@ -150,7 +150,7 @@ int dominant_operator(int p , int q){
     for(int i = p; i <= q; i++){
 		if(tokens[i].type == '('){
 			left += 1;
-			i++;printf("%d\n", i);
+			i++;
 		    while(1){
 				if(tokens[i].type == '(')
 				   	left += 1;
@@ -162,19 +162,18 @@ int dominant_operator(int p , int q){
 			}  
 			if(i > q)
 				break;
-			printf("%d\n", i);
 		}
 	    else if(tokens[i].type == TK_10)
 		   	continue;
 		else if(operator_precedence(tokens[i].type) >= flag){
 	        flag = operator_precedence(tokens[i].type);
-			domin = i;printf("%d\n", i);
-
+			domin = i;
 			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcat(dest, tokens[j].str);
 			Log("对于字符串'%s', 主操作符:tokens[%d]='%s'", dest, domin, tokens[domin].str);
-	    }      
+	    }
+printf("aaaaaaa:%d\n", operator_precedence(tokens[i].type));		
 	}          
 	return domin;
 }       
