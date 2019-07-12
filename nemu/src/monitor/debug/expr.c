@@ -150,7 +150,7 @@ int dominant_operator(int p , int q){
     for(int i = p; i <= q; i++){
 		if(tokens[i].type == '('){
 			left += 1;
-			i++;
+			i++;printf("%d\n", i);
 		    while(1){
 				if(tokens[i].type == '(')
 				   	left += 1;
@@ -162,7 +162,8 @@ int dominant_operator(int p , int q){
 			}  
 			if(i > q)
 				break;
-		}      
+			printf("%d\n", i);
+		}
 	    else if(tokens[i].type == TK_10)
 		   	continue;
 		else if(operator_precedence(tokens[i].type) >= flag){
