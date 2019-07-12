@@ -70,6 +70,22 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args){
+    char *arg = strtok(args, " ");
+	if(arg == NULL){
+		printf("请输入参数N！\n");
+	    return 0;
+	}
+	bool *success = NULL;
+	*success = true;
+	uint32_t result = expr(arg, success);
+	if (*success)
+		printf("%d\nOK!\n", result);
+	else
+		printf("表达式出错！\n");
+    return 0;
+}
+
 static int cmd_x(char *args) {
 	char *arg = strtok(args, " ");
 	if(arg == NULL){
@@ -93,6 +109,7 @@ static int cmd_x(char *args) {
 		}
 		printf("\n");
 	}
+	printf("OK!\n");
 	return 0;
 }
 
@@ -107,8 +124,9 @@ static struct {
 
   /* TODO: Add more commands */
   { "si", "后面可以跟参数N, 让程序单步执行N条指令后暂停执行, 当N没有给出时, 缺省为1", cmd_si },
-  { "info", "后面跟参数r,打印寄存器状态;后面跟参数w,打印监视点信息", cmd_info},
-  { "x", "x N EXPR,求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
+  { "info", "后面跟参数r, 打印寄存器状态; 后面跟参数w, 打印监视点信息", cmd_info},
+  { "p", "p EXPR, 求出表达式EXPR的值", cmd_p},
+  { "x", "x N EXPR, 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
 
 };
 
