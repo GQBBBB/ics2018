@@ -137,8 +137,10 @@ bool check_parentheses(int p ,int q){
 		   	tag++;
 	    else if(tokens[i].type == ')')
 		   	tag--;
-		if((tag < 0) || (tag == 0 && i < q))
-			return false; // 括号错误：(4 + 3)) * ((2 - 1),没有用括号包裹整个表达式： 4 + 3 * (2 - 1)
+        if(tag < 0)
+			panic("Error: 括号错误！\n");
+		if(tag == 0 && i < q)
+			return false;
 	}                              
 	if( tag != 0 )
 	   	return false;   
