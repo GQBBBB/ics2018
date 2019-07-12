@@ -163,8 +163,9 @@ int dominant_operator(int p , int q){
 			if(i > q)
 				break;
 		}
-	    else if(tokens[i].type == TK_10)
+	    else if(tokens[i].type == TK_10){
 		   	continue;
+		}
 		else if(operator_precedence(tokens[i].type) >= flag){
 	        flag = operator_precedence(tokens[i].type);
 			domin = i;
