@@ -171,7 +171,7 @@ int dominant_operator(int p , int q){
 			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcat(dest, tokens[j].str);
-			printf("对于字符串%s, 主操作符:tokens[%d]=%s\n", dest, domin, tokens[domin].str);
+			printf("对于字符串'%s', 主操作符:tokens[%d]='%s'\n", dest, domin, tokens[domin].str);
 	    }      
 	}          
 	return domin;
