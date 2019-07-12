@@ -164,18 +164,18 @@ int dominant_operator(int p , int q){
 				break;
 			printf("i=%d\n", i);
 		}
-	    else if(tokens[i].type == TK_10){
+	    if(tokens[i].type == TK_10){
 		   	continue;
 		}
-		else if(operator_precedence(tokens[i].type) >= flag){
+		if(operator_precedence(tokens[i].type) >= flag){
 	        flag = operator_precedence(tokens[i].type);
 			domin = i;
 			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcat(dest, tokens[j].str);
 			Log("对于字符串'%s', 主操作符:tokens[%d]='%s'", dest, domin, tokens[domin].str);
-	    }else
-			printf("aaaaaaa:%d, %d\n", operator_precedence(tokens[i].type), flag);		
+	    }
+	    printf("aaaaaaa:%d, %d\n", operator_precedence(tokens[i].type), flag);		
 	}          
 	return domin;
 }       
