@@ -72,16 +72,15 @@ static int cmd_info(char *args) {
 
 static int cmd_p(char *args){
     char *arg = strtok(args, " ");
-	bool *success = NULL;
-	*success = true;
+	bool success = true;
 	if(arg == NULL){
 		printf("请输入参数N！\n");
 	    return 0;
 	}
 	printf("表达式： %s\n", arg);
-	uint32_t result = expr(arg, success);
+	uint32_t result = expr(arg, &success);
 	printf("结果： %d\n", result);
-	if (*success)
+	if (success)
 		printf("%d\nOK!\n", result);
 	else
 		printf("表达式出错！\n");
