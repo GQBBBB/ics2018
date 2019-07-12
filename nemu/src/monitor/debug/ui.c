@@ -79,6 +79,7 @@ static int cmd_p(char *args){
 	printf("表达式： %s\n", arg);
 	bool *success = NULL;
 	*success = true;
+	printf("======================");
 	uint32_t result = expr(arg, success);
 	printf("结果： %d\n", result);
 	if (*success)
