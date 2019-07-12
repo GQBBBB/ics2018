@@ -76,6 +76,7 @@ static int cmd_p(char *args){
 		printf("请输入参数N！\n");
 	    return 0;
 	}
+	printf("表达式： %s\n", arg);
 	bool *success = NULL;
 	*success = true;
 	uint32_t result = expr(arg, success);
