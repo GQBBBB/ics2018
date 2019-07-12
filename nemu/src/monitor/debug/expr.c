@@ -171,7 +171,7 @@ int dominant_operator(int p , int q){
 			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcat(dest, tokens[j].str);
-			printf("对于字符串%s, domin:tokens[%d]=%s\n", dest, domin, tokens[domin].str);
+			printf("对于字符串%s, 主操作符:tokens[%d]=%s\n", dest, domin, tokens[domin].str);
 	    }      
 	}          
 	return domin;
@@ -209,7 +209,6 @@ uint32_t eval(int p, int q) {
 	else {
 		/* We should do more things here. */
 		int op = dominant_operator(p , q);
-		printf("主操作符:tokens[%d]=%s\n", op, tokens[op].str);
 		uint32_t val1 = eval(p, op - 1);
 	    uint32_t val2 = eval(op + 1, q);
 		switch (tokens[op].type) {
