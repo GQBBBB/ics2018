@@ -163,7 +163,7 @@ int dominant_operator(int p , int q){
 			if(i > q)
 				break;
 		}
-		else if(tokens[i].type == TK_10){printf("1111111111111111111\n");
+		else if(tokens[i].type == TK_10){printf("%s\n", tokens[i].str);
 		   	continue;
 		}
 		else if(operator_precedence(tokens[i].type) >= flag){
@@ -205,7 +205,6 @@ uint32_t eval(int p, int q) {
 		/* The expression is surrounded by a matched pair of parentheses.
 		 * If that is the case, just throw away the parentheses.
 		 */
-	    printf("==: %d, %d\n",p + 1, q-1);
 	    return eval(p + 1, q - 1);
 	}
 	else {
