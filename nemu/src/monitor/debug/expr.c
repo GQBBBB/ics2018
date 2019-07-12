@@ -131,7 +131,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 bool check_parentheses(int p ,int q){
-    int tag = 0;printf("check:%d, %d\n", p, q);
+    int tag = 0;
     for(int i = p; i <= q; i++){    
 		if(tokens[i].type == '(')
 		   	tag++;
@@ -146,7 +146,7 @@ bool check_parentheses(int p ,int q){
 } 
 
 int dominant_operator(int p , int q){
-    int domin = p, left = 0, flag = 0;printf("domin:%d, %d\n", p, q);
+    int domin = p, left = 0, flag = 0;
     for(int i = p; i <= q; i++){
 		if(tokens[i].type == '('){
 			left += 1;
@@ -162,12 +162,11 @@ int dominant_operator(int p , int q){
 			}  
 			if(i > q)
 				break;
-			printf("i=%d\n", i);
 		}
-	    if(tokens[i].type == TK_10){
+		else if(tokens[i].type == TK_10){printf("1111111111111111111\n");
 		   	continue;
 		}
-		if(operator_precedence(tokens[i].type) >= flag){
+		else if(operator_precedence(tokens[i].type) >= flag){
 	        flag = operator_precedence(tokens[i].type);
 			domin = i;
 			char dest[255] = "\0";
@@ -175,7 +174,6 @@ int dominant_operator(int p , int q){
 				strcat(dest, tokens[j].str);
 			Log("对于字符串'%s', 主操作符:tokens[%d]='%s'", dest, domin, tokens[domin].str);
 	    }
-	    printf("aaaaaaa:%d, %d\n", operator_precedence(tokens[i].type), flag);		
 	}          
 	return domin;
 }       
@@ -213,8 +211,7 @@ uint32_t eval(int p, int q) {
 	else {
 		/* We should do more things here. */
 		int op = dominant_operator(p , q);
-	    printf("op:%d\nval1: %d, %d\n", op, p, op-1);
-    	uint32_t val1 = eval(p, op - 1);printf("val2: %d, %d\n", op + 1, q);
+    	uint32_t val1 = eval(p, op - 1);
 		uint32_t val2 = eval(op + 1, q);
 		switch (tokens[op].type) {
 		    case '+': printf("'+', %d\n", val1 + val2); return val1 + val2;
