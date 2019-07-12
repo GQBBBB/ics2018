@@ -146,7 +146,7 @@ bool check_parentheses(int p ,int q){
 } 
 
 int dominant_operator(int p , int q){
-    int domin = p, left = 0, flag = 0;
+    int domin = p, left = 0, flag = 0;printf("%d, %d\n", p, q);
     for(int i = p; i <= q; i++){
 		if(tokens[i].type == '('){
 			left += 1;
