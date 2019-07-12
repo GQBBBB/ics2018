@@ -148,7 +148,7 @@ bool check_parentheses(int p ,int q){
 int dominant_operator(int p , int q){
     int domin = p, left = 0, flag = 0;
     for(int i = p; i <= q; i++){
-		if(tokens[i].type == '('){
+		if(tokens[i].type == '('){ // 略过括号内
 			left += 1;
 			i++;
 		    while(1){
@@ -163,10 +163,10 @@ int dominant_operator(int p , int q){
 			if(i > q)
 				break;
 		}
-		else if(tokens[i].type == TK_10){printf("%s\n", tokens[i].str);
+		if(tokens[i].type == TK_10){ // 略过十进制数
 		   	continue;
 		}
-		else if(operator_precedence(tokens[i].type) >= flag){
+		if(operator_precedence(tokens[i].type) >= flag){ // 处理运算符优先级
 	        flag = operator_precedence(tokens[i].type);
 			domin = i;
 			char dest[255] = "\0";
