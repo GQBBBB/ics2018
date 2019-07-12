@@ -123,7 +123,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   for(int i = 0; i< nr_token; i++)
-	  printf("tokens[%d]: %s\n", i, tokens[i].str);
+	  Log("tokens[%d]: %s", i, tokens[i].str);
   /* TODO: Insert codes to evaluate the expression. */
   uint32_t result = eval(0, nr_token - 1);
 
@@ -171,7 +171,7 @@ int dominant_operator(int p , int q){
 			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcat(dest, tokens[j].str);
-			printf("对于字符串'%s', 主操作符:tokens[%d]='%s'\n", dest, domin, tokens[domin].str);
+			Log("对于字符串'%s', 主操作符:tokens[%d]='%s'", dest, domin, tokens[domin].str);
 	    }      
 	}          
 	return domin;
