@@ -168,7 +168,7 @@ int dominant_operator(int p , int q){
 		else if(operator_precedence(tokens[i].type) >= flag){
 	        flag = operator_precedence(tokens[i].type);
 			domin = i;
-			char dest[255];
+			char dest[255] = "\0";
 			for(int j = p; j <= q; j++)
 				strcpy(dest, tokens[j].str);
 			printf("对于字符串%s, domin:tokens[%d]=%s\n", dest, domin, tokens[domin].str);
