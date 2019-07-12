@@ -33,12 +33,13 @@ static struct rule {
   {"\\/", '/'},         // div
   {"\\(", '('},           // (
   {"\\)", ')'},           // )
-  {"[1-9]\\d*", TK_10}, // 十进制正整数
-
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"==", TK_EQ},         // equal
+
+  {"[1-9]\\d*", TK_10} // 十进制正整数
+
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )

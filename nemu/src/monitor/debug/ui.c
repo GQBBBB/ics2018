@@ -79,9 +79,8 @@ static int cmd_p(char *args){
 	}
 	printf("表达式： %s\n", arg);
 	uint32_t result = expr(arg, &success);
-	printf("结果： %d\n", result);
 	if (success)
-		printf("%d\nOK!\n", result);
+		printf("结果： %d\nOK!\n", result);
 	else
 		printf("表达式出错！\n");
     return 0;
