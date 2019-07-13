@@ -17,7 +17,8 @@ enum {
   TK_EQ = 257,
 
   /* TODO: Add more token types */
-  TK_10 = 258
+  TK_10 = 258,
+  TK_16 = 259
 };
 
 static struct rule {
@@ -39,8 +40,8 @@ static struct rule {
 
   {"==", TK_EQ},         // equal
 
-  {"[1-9][0-9]*", TK_10} // 十进制正整数
-
+  {"[1-9][0-9]*", TK_10}, // 十进制正整数
+  {"0[xX][0-9a-fA-F]+", TK_16} // 十六进制数
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -167,7 +168,7 @@ int dominant_operator(int p , int q){
 			if(i > q)
 				break;
 		}
-		if(tokens[i].type == TK_10){ // 略过十进制数
+		if(tokens[i].type == TK_10 || tokens[i].type == TK_16){ // 略过十进制数, 十六进制数
 		   	continue;
 		}
 		if(operator_precedence(tokens[i].type) >= flag){ // 处理运算符优先级
@@ -203,7 +204,15 @@ uint32_t eval(int p, int q) {
 		 * For now this token should be a number.
 		 * Return the value of the number.                         
 		 */
-		return atoi(tokens[p].str);
+		if(tokens[p].type == TK_10)
+            return atoi(tokens[p].str);
+		else if(tokens[p].type == TK_10){
+            char *str;
+	        uint32_t toi = strtol(tokens[p].str, &str, 16);
+			return toi;
+		}else{ 
+			return atoi(tokens[p].str);
+		}
 	}
 	else if (check_parentheses(p, q) == true) {
 		/* The expression is surrounded by a matched pair of parentheses.
