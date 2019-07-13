@@ -42,9 +42,9 @@ static struct rule {
 
   {"==", TK_EQ},         // equal
 
-  {"[1-9][0-9]*", TK_10}, // 十进制正整数
+  {"\\$[eE][a-dsA-DS][xpiXPI]|\\$[a-dsA-DS][xpiXPI]|\\$[a-dA-D][hlHL]", TK_REG}, // 寄存器
   {"0[xX][0-9a-fA-F]+", TK_16}, // 十六进制数
-  {"\\$[eE][a-dsA-DS][xpiXPI]|\\$[a-dsA-DS][xpiXPI]|\\$[a-dA-D][hlHL]", TK_REG} // 寄存器
+  {"[1-9][0-9]*", TK_10} // 十进制正整数
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
