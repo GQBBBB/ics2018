@@ -104,7 +104,7 @@ static bool make_token(char *e) {
           default: strncpy(tokens[nr_token].str, substr_start, substr_len);
                    tokens[nr_token].str[substr_len] = '\0';
 				   tokens[nr_token].type = rules[i].token_type;
-				   printf("==========\n%s\n=========\n",tokens[nr_token].str);
+				   // printf("==========\n%s\n=========\n",tokens[nr_token].str);
 				   nr_token++;
 				   break;
         }
