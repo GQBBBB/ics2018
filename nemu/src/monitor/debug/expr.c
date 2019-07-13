@@ -207,13 +207,13 @@ uint32_t eval(int p, int q) {
 		if(tokens[p].type == TK_10){printf("10:%d\n",atoi(tokens[p].str));
             return atoi(tokens[p].str);
 		}
-		else if(tokens[p].type == TK_10){
+		if(tokens[p].type == TK_10){
             char *str;
 	        uint32_t toi = strtol(tokens[p].str, &str, 16);printf("16:%d\n",toi);
 			return toi;
-		}else{ printf("other:%d\n",atoi(tokens[p].str));
-			return atoi(tokens[p].str);
 		}
+		panic("Error: tokens[%d]出错！", p);
+		return 0;
 	}
 	else if (check_parentheses(p, q) == true) {
 		/* The expression is surrounded by a matched pair of parentheses.
