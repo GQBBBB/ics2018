@@ -220,10 +220,31 @@ uint32_t eval(int p, int q) {
 			char *str2;
             if(strcmp(tokens[p].str, "$EAX") == 0 || strcmp(tokens[p].str, "$eax") == 0){
 				sprintf(str1, "%8x", cpu.eax);
-                uint32_t toi = strtol(str1, &str2, 16);
-			    printf("reg: str1: %s, toi: %d\n",str1, toi);
-			    return toi;
 			}
+			else if(strcmp(tokens[p].str, "$EBX") == 0 || strcmp(tokens[p].str, "$ebx") == 0){
+				sprintf(str1, "%8x", cpu.ebx);
+			}
+			else if(strcmp(tokens[p].str, "$ECX") == 0 || strcmp(tokens[p].str, "$ecx") == 0){
+				sprintf(str1, "%8x", cpu.ecx);
+			}
+			else if(strcmp(tokens[p].str, "$EDX") == 0 || strcmp(tokens[p].str, "$edx") == 0){
+				sprintf(str1, "%8x", cpu.edx);
+			}
+			else if(strcmp(tokens[p].str, "$EBP") == 0 || strcmp(tokens[p].str, "$ebp") == 0){
+				sprintf(str1, "%8x", cpu.ebp);
+			}
+			else if(strcmp(tokens[p].str, "$ESP") == 0 || strcmp(tokens[p].str, "$esp") == 0){
+				sprintf(str1, "%8x", cpu.esp);
+			}
+			else if(strcmp(tokens[p].str, "$ESI") == 0 || strcmp(tokens[p].str, "$esi") == 0){
+				sprintf(str1, "%8x", cpu.esi);
+			}
+			else if(strcmp(tokens[p].str, "$EDI") == 0 || strcmp(tokens[p].str, "$edi") == 0){
+				sprintf(str1, "%8x", cpu.edi);
+			}
+            uint32_t toi = strtol(str1, &str2, 16);
+			// printf("reg: str1: %s, toi: %d\n",str1, toi);
+			return toi;
 		}
 		panic("Error: tokens[%d]出错！", p);
 	}
