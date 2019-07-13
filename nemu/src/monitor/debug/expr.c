@@ -124,7 +124,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   for(int i = 0; i< nr_token; i++)
-	  Log("tokens[%d]: %s", i, tokens[i].str);
+	  Log("tokens[%d]: %s(%d)", i, tokens[i].str, tokens[i].type);
   /* TODO: Insert codes to evaluate the expression. */
   uint32_t result = eval(0, nr_token - 1);
 
