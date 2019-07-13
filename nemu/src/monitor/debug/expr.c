@@ -215,6 +215,7 @@ uint32_t eval(int p, int q) {
 			// printf("16:%d\n",toi);
 			return toi;
 		}else if(tokens[p].type == TK_REG){
+            
 		}
 		panic("Error: tokens[%d]出错！", p);
 	}
