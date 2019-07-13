@@ -204,13 +204,14 @@ uint32_t eval(int p, int q) {
 		 * For now this token should be a number.
 		 * Return the value of the number.                         
 		 */
-		if(tokens[p].type == TK_10)
+		if(tokens[p].type == TK_10){printf("10:%d\n",atoi(tokens[p].str));
             return atoi(tokens[p].str);
+		}
 		else if(tokens[p].type == TK_10){
             char *str;
-	        uint32_t toi = strtol(tokens[p].str, &str, 16);
+	        uint32_t toi = strtol(tokens[p].str, &str, 16);printf("16:%d\n",toi);
 			return toi;
-		}else{ 
+		}else{ printf("other:%d\n",atoi(tokens[p].str));
 			return atoi(tokens[p].str);
 		}
 	}
