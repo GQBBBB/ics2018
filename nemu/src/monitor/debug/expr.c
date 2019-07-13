@@ -213,7 +213,6 @@ uint32_t eval(int p, int q) {
 			return toi;
 		}
 		panic("Error: tokens[%d]出错！", p);
-		return 0;
 	}
 	else if (check_parentheses(p, q) == true) {
 		/* The expression is surrounded by a matched pair of parentheses.
