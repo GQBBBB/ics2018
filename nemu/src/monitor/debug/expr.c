@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <regex.h>
 #include <stdlib.h>
+#include <string.h>
 
 bool check_parentheses(int p ,int q);
 int dominant_operator(int p , int q);
@@ -215,7 +216,14 @@ uint32_t eval(int p, int q) {
 			// printf("16:%d\n",toi);
 			return toi;
 		}else if(tokens[p].type == TK_REG){
-            
+			char str1[32] = "\0";
+			char *str2;
+            if(strcmp(tokens[p].str, "$EAX") == 0 || strcmp(tokens[p].str, "$eax") == 0){
+				sprintf(str1, "%8x", cpu.eax);
+                uint32_t toi = strtol(str1, &str2, 16);
+			    printf("reg: str1: %s, toi: %d\n",str1, toi);
+			    return toi;
+			}
 		}
 		panic("Error: tokens[%d]出错！", p);
 	}
