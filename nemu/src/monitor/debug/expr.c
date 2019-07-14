@@ -320,8 +320,6 @@ uint32_t eval(int p, int q) {
 		int op = dominant_operator(p, q);
     	uint32_t val1 = eval(p, op - 1);
         uint32_t val2 = eval(op + 1, q);
-		char str3[32] = "\0";
-	    char *str4;
         vaddr_t addr;
 		switch (tokens[op].type) {
 		    case '+': return val1 + val2;
@@ -336,9 +334,8 @@ uint32_t eval(int p, int q) {
 					  else
 						  return val1 % val2;
 		    case 261: return -val2;
-			case 262: sprintf(str3, "%d", val2); 
-					  addr = strtol(str3, &str4, 10);
-                      printf("262: 十:%d, str:%s, address:%x, value:%d\n", val2, str3, addr, vaddr_read(addr, 1));
+			case 262: addr = val2;
+                      printf("262: val2:%d, address:%x, value:%d\n", val2, addr, vaddr_read(addr, 1));
 					  return vaddr_read(addr, 1);
 			default: panic("Error: tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2);
 		}
