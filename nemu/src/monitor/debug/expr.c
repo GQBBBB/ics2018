@@ -20,7 +20,9 @@ enum {
   /* TODO: Add more token types */
   TK_10 = 258,
   TK_16 = 259,
-  TK_REG = 260
+  TK_REG = 260,
+  TK_NEG = 261,
+  TK_POINT = 262
 };
 
 static struct rule {
@@ -104,6 +106,13 @@ static bool make_token(char *e) {
           default: strncpy(tokens[nr_token].str, substr_start, substr_len);
                    tokens[nr_token].str[substr_len] = '\0';
 				   tokens[nr_token].type = rules[i].token_type;
+
+				   // 处理负号，指针
+                   if(tokens[nr_token].type == '*' && (nr_token == 0 || (tokens[nr_token-1].type != TK_10 && tokens[nr_token-1].type != TK_REG && tokens[nr_token-1].type != TK_16)))
+	                   tokens[nr_token].type = TK_POINT;
+                   if(tokens[nr_token].type == '-' && (nr_token == 0 || (tokens[nr_token-1].type != TK_10 && tokens[nr_token-1].type != TK_REG && tokens[nr_token-1].type != TK_16)))
+	                   tokens[nr_token].type = TK_NEG;
+
 				   // printf("==========\n%s\n=========\n",tokens[nr_token].str);
 				   nr_token++;
 				   break;
@@ -195,7 +204,9 @@ int operator_precedence(int op){
 		return 4;
 	else if(op == '*' || op == '/' || op == '%') // '*', '/', '%'
 		return 3;
-	else 
+	else if(op == 261 || op ==262) // TK_NEG, TK_POINT
+		return 2;
+	else
 		return 0;
 }
 
@@ -293,7 +304,7 @@ uint32_t eval(int p, int q) {
 				sprintf(str1, "%8x", cpu.edx & 0xff);
 			}
 			uint32_t toi = strtol(str1, &str2, 16);
-			printf("reg: str1: %s, toi: %d\n",str1, toi);
+			// printf("reg: str1: %s, toi: %d\n",str1, toi);
 			return toi;
 		}
 		panic("Error: tokens[%d]出错！", p);
@@ -308,7 +319,10 @@ uint32_t eval(int p, int q) {
 		/* We should do more things here. */
 		int op = dominant_operator(p, q);
     	uint32_t val1 = eval(p, op - 1);
-		uint32_t val2 = eval(op + 1, q);
+        uint32_t val2 = eval(op + 1, q);
+		char str3[32] = "\0";
+	    char *str4;
+        vaddr_t addr;
 		switch (tokens[op].type) {
 		    case '+': return val1 + val2;
 			case '-': return val1 - val2;
@@ -321,6 +335,11 @@ uint32_t eval(int p, int q) {
 						  panic("表达式（%d, %d）结果为零！", op + 2, q + 1);
 					  else
 						  return val1 % val2;
+		    case 261: return -val2;
+			case 262: sprintf(str3, "%8x", val2);
+					  printf("262: %d, %s", val2, str3);
+					  addr = strtol(str3, &str4, 16);
+					  return vaddr_read(addr, 4);
 			default: panic("Error: tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2);
 		}
 	}
