@@ -336,10 +336,10 @@ uint32_t eval(int p, int q) {
 					  else
 						  return val1 % val2;
 		    case 261: return -val2;
-			case 262: sprintf(str3, "%8x", val2);
-					  printf("262: %d, %s", val2, str3);
+			case 262: sprintf(str3, "%8x", val2); 
 					  addr = strtol(str3, &str4, 16);
-					  return vaddr_read(addr, 4);
+                      printf("262: 10:%d, 16str:%s, 16address:%x, value:%d", val2, str3, addr, vaddr_read(addr, 1));
+					  return vaddr_read(addr, 1);
 			default: panic("Error: tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2);
 		}
 	}
