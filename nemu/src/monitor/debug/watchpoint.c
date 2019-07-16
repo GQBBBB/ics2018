@@ -34,7 +34,7 @@ WP* new_wp(char *str){
 	new = free_;
 	free_ = free_->next;
 
-//	new->expr = str;
+	new->expr = "abcdefahijklmn";
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
