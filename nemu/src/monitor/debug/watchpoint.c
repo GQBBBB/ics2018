@@ -34,7 +34,8 @@ WP* new_wp(char *str){
 	new = free_;
 	free_ = free_->next;
 
-	new->expr = str;printf("str address:%08x\n",*str);
+    strcpy(new->expr, str);
+	printf("str address:%08x\n",*str);
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
@@ -64,7 +65,7 @@ void free_wp(int n){
 	    panic("Error:no watchpoint!");
     }else if(head->NO == n){
 	    head = head->next;
-		p2->expr = NULL;
+//		p2->expr = "\0";
         p2->value = 0;
         p2->flag = false; 
 		p2->type = NULL;
@@ -75,7 +76,7 @@ void free_wp(int n){
 	}else{
         while(p1 != NULL){
            if(p1->NO == n){
-		       p1->expr = NULL;
+//		       p1->expr = "\0";
                p1->value = 0;
                p1->flag = false;
 			   p1->type = NULL;
