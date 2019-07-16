@@ -102,6 +102,7 @@ void print_wp(){
 	  WP *p = head;
 	  while(p != NULL){
 		  printf("No.%d %s %s at 0x%08x\n", p->NO, p->type, p->expr, p->value);
+		  printf("No.%d %s %s at 0x%08x\n", p->NO, p->type, p->expr, p->value);
 		  p = p->next;
 	  }
 	  return;
