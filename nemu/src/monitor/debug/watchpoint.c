@@ -35,7 +35,7 @@ WP* new_wp(char *str){
 	free_ = free_->next;
 
     strcpy(new->expr, str);
-	printf("str address:%08x\n",*str);
+//	printf("str address:%08x\n",*str);
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
@@ -53,8 +53,6 @@ WP* new_wp(char *str){
 	    head = new;
 	}
 	printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
-	printf("===========================\n");
-	print_wp();
 	return new;
 }
 
