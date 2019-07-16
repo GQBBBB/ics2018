@@ -53,7 +53,7 @@ WP* new_wp(char *str){
 		new->next = head;
 	    head = new;
 	}
-	printf("No.%d %s %s at %8x\n", new->NO, new->type, new->expr, new->value);
+	printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
 	return new;
 }
 
@@ -100,7 +100,7 @@ void print_wp(){
 	  }
 	  WP *p = head;
 	  while(p != NULL){
-		  printf("No.%d %s %s at %8x\n", p->NO, p->type, p->expr, p->value);
+		  printf("No.%d %s %s at 0x%08x\n", p->NO, p->type, p->expr, p->value);
 		  p = p->next;
 	  }
 	  return;
