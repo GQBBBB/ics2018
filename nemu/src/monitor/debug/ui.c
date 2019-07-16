@@ -64,7 +64,7 @@ static int cmd_info(char *args) {
 	  printf("EDI : %x\n", cpu.edi);
 	  printf("ESP : %x\n", cpu.esp);
   } else if(strcmp(arg, "w") == 0){
-	  //等待完成
+	 print_wp(); 
   }
   printf("OK!\n");
   return 0;
@@ -97,8 +97,12 @@ static int cmd_x(char *args) {
 		printf("请输入内存起始地址！\n");
 		return 0;
 	}
-	char *str;
-	vaddr_t addr = strtol(EXPR, &str, 16);
+	bool success = true;
+	vaddr_t addr = expr(EXPR, &success);
+    if (!success){
+		printf("表达式出错！\n");
+		return 0;
+	}
 	for(int i = 0; i < n; i++){
 		uint32_t data = vaddr_read(addr + i * 4, 4);
 		printf("0x%08x	", addr + i * 4);
@@ -108,6 +112,16 @@ static int cmd_x(char *args) {
 		}
 		printf("\n");
 	}
+	printf("OK!\n");
+	return 0;
+}
+
+static int cmd_w(char *args){
+    if(args == NULL){
+		printf("请输入参数N！\n");
+	    return 0;
+	}
+    new_wp(args);
 	printf("OK!\n");
 	return 0;
 }
@@ -126,7 +140,7 @@ static struct {
   { "info", "后面跟参数r, 打印寄存器状态; 后面跟参数w, 打印监视点信息", cmd_info},
   { "p", "p EXPR, 求出表达式EXPR的值", cmd_p},
   { "x", "x N EXPR, 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
-
+  { "w", "w EXPR, 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

@@ -37,6 +37,7 @@ WP* new_wp(char *str){
 	free_ = free_->next;
 
     strcpy(new->expr, str);
+	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
 	if (success)
@@ -52,6 +53,7 @@ WP* new_wp(char *str){
 		new->next = head;
 	    head = new;
 	}
+	printf("No.%d %s %s at %8x\nOK!\n", new->NO, new->type, new->expr, new->value);
 	return new;
 }
 
@@ -65,6 +67,7 @@ void free_wp(int n){
 		p2->expr = NULL;
         p2->value = 0;
         p2->flag = false; 
+		p2->type = NULL;
         p2->next = free_;
         free_ = p2;
 		return;
@@ -74,6 +77,7 @@ void free_wp(int n){
 		       p1->expr = NULL;
                p1->value = 0;
                p1->flag = false;
+			   p1->type = NULL;
 			   p2->next = p1->next;
                p1->next = free_;
 			   free_ = p1;
@@ -87,4 +91,17 @@ void free_wp(int n){
    }
    printf("监视点 %d 不存在!\n",n);
    return;
+}
+
+void print_wp(){
+     if(head == NULL){
+		  printf("不存在监视点!\n");
+		  return;
+	  }
+	  WP *p = head;
+	  while(p != NULL){
+		  printf("No.%d %s %s at %8x\n", p->NO, p->type, p->expr, p->value);
+		  p = p->next;
+	  }
+	  return;
 }
