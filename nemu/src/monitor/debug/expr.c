@@ -22,7 +22,10 @@ enum {
   TK_16 = 259,
   TK_REG = 260,
   TK_NEG = 261,
-  TK_POINT = 262
+  TK_POINT = 262,
+  TK_NOTEQ = 263,
+  TK_AND = 264,
+  TK_OR = 265
 };
 
 static struct rule {
@@ -43,6 +46,9 @@ static struct rule {
   {"\\)", ')'},           // )
 
   {"==", TK_EQ},         // equal
+  {"!=", TK_NOTEQ},      // not equal
+  {"&&", TK_AND},        // and
+  {"\\|\\|", TK_OR},     // or
 
   {"\\$[eE][a-dsA-DS][xpiXPI]|\\$[a-dsA-DS][xpiXPI]|\\$[a-dA-D][hlHL]", TK_REG}, // 寄存器
   {"0[xX][0-9a-fA-F]+", TK_16}, // 十六进制数
@@ -198,7 +204,7 @@ int dominant_operator(int p , int q){
 }       
 
 int operator_precedence(int op){
-	if(op == 257) // '=='
+	if(op == 257 || op == 263) // '==', "!="
 		return 7;
     else if(op == '+' || op == '-') // '+', '-'
 		return 4;
@@ -206,6 +212,10 @@ int operator_precedence(int op){
 		return 3;
 	else if(op == 261 || op ==262) // TK_NEG, TK_POINT
 		return 2;
+	else if(op == 264) // "&&"
+		return 11;
+	else if(op == 265) // "||"
+		return 12;
 	else
 		return 0;
 }
@@ -335,8 +345,18 @@ uint32_t eval(int p, int q) {
 						  return val1 % val2;
 		    case 261: return -val2;
 			case 262: addr = val2;
-                      printf("262: val2:%d, address:%x, value:%d\n", val2, addr, vaddr_read(addr, 1));
+                      // printf("262: val2:%d, address:%d, value:%d\n", val2, addr, vaddr_read(addr, 1));
 					  return vaddr_read(addr, 1);
+			case 257: if(val1 == val2)
+						  return 1;
+					  else
+						  return 0;
+			case 263: if(val1 == val2)
+						  return 0;
+					  else
+						  return 1;
+			case 264: return (val1 && val2);
+			case 265: return (val1 || val2);
 			default: panic("Error: tokens[%d]=%s, val1=%d, val2=%d\n", op, tokens[op].str, val1, val2);
 		}
 	}
