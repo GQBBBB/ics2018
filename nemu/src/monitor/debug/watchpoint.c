@@ -53,7 +53,7 @@ WP* new_wp(char *str){
 		new->next = head;
 	    head = new;
 	}
-	printf("No.%d %s %s at %8x\nOK!\n", new->NO, new->type, new->expr, new->value);
+	printf("No.%d %s %s at %8x\n", new->NO, new->type, new->expr, new->value);
 	return new;
 }
 
