@@ -31,7 +31,7 @@ WP* new_wp(char *str){
     if(free_ == NULL){
 	    panic("Error:no remaining watchpoints!");
 	}
-
+printf("123456789\n");
 	WP *new = NULL;
 	new = free_;
 	free_ = free_->next;
