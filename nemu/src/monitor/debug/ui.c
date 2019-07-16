@@ -116,7 +116,7 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
-static int cmd_w(char *args){
+static int cmd_w(char *args){printf("1111111111111111111\n");
     if(args == NULL){
 		printf("请输入参数N！\n");
 	    return 0;
