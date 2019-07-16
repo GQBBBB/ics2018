@@ -116,11 +116,11 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
-static int cmd_w(char *args){printf("1111111111111111111\n");
+static int cmd_w(char *args){
     if(args == NULL){
 		printf("请输入参数N！\n");
 	    return 0;
-	}
+	}printf("1111111111111111111\n");
     new_wp(args);
 	printf("OK!\n");
 	return 0;
