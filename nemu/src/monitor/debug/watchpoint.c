@@ -1,6 +1,5 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
-#include <stdio.h>
 
 #define NR_WP 32
 
@@ -37,7 +36,7 @@ WP* new_wp(char *str){
 	new = free_;
 	free_ = free_->next;
 
-	sprintf(new->expr, "%s", str);
+	new->expr = str;
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
