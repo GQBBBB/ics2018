@@ -126,6 +126,18 @@ static int cmd_w(char *args){
 	return 0;
 }
 
+static int cmd_d(char *args){
+	char *arg = strtok(args, " ");
+	if(arg == NULL){
+		printf("请输入参数N！\n");
+	    return 0;
+	}
+	int n = atoi(arg);
+	free_wp(n);
+	printf("OK!\n");
+	return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -140,7 +152,8 @@ static struct {
   { "info", "后面跟参数r, 打印寄存器状态; 后面跟参数w, 打印监视点信息", cmd_info},
   { "p", "p EXPR, 求出表达式EXPR的值", cmd_p},
   { "x", "x N EXPR, 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
-  { "w", "w EXPR, 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w}
+  { "w", "w EXPR, 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
+  { "d", "d N, 删除序号为N的监视点", cmd_d}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
