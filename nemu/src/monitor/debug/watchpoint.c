@@ -12,9 +12,6 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = &wp_pool[i + 1];
-	wp_pool[i].expr = NULL;
-    wp_pool[i].type = NULL;
-    wp_pool[i].flag = false;
   }
   wp_pool[NR_WP - 1].next = NULL;
 
@@ -37,7 +34,7 @@ WP* new_wp(char *str){
 	new = free_;
 	free_ = free_->next;
 
-	new->expr = str;
+//	new->expr = str;
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
