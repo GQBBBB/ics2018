@@ -32,14 +32,14 @@ WP* new_wp(char *str){
 	    panic("Error:no remaining watchpoints!");
 	}
 
-	WP *new = NULL;
+	WP *new = NULL;printf("1\n");
 	new = free_;
 	free_ = free_->next;
-
+printf("2\n");
     strcpy(new->expr, str);
 	new->type = "watchpoint";
-	bool success = true;printf("1\n");
-    uint32_t result = expr(str, &success);printf("2\n");
+	bool success = true;
+    uint32_t result = expr(str, &success);
 	if (success)
 		new->value = result;
 	else
