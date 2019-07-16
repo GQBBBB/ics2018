@@ -36,7 +36,7 @@ WP* new_wp(char *str){
 	new = free_;
 	free_ = free_->next;
 
-	strncpy(new->expr, str, strlen(str) + 1);
+	sprintf(new->expr, "%s", str);
 	new->type = "watchpoint";
 	bool success = true;
     uint32_t result = expr(str, &success);
