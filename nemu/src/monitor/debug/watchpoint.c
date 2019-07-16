@@ -70,6 +70,7 @@ void free_wp(int n){
 		p2->type = NULL;
         p2->next = free_;
         free_ = p2;
+		printf("监视点 %d 已删除!\n", n);
 		return;
 	}else{
         while(p1 != NULL){
