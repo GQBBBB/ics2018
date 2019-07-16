@@ -105,3 +105,19 @@ void print_wp(){
 	  }
 	  return;
 }
+
+void check_wp(){
+    if(head != NULL){
+	    WP *p = head;
+	    while(p != NULL){
+	        bool success = true;
+            uint32_t result = expr(p->expr, &success);
+	        if (success && (result != p->value)){
+				printf("触发监视点 %d :值由 %d 变为 %d \n", p->NO, p->value, result);
+				return;
+			}
+		    p = p->next;
+	    }
+	}
+	return;
+}
