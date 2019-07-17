@@ -66,20 +66,22 @@ WP* new_wp(char *str){
 		int nvalue = 0;          
 		sscanf(p, "%x", &nvalue);
 		cpu.eip = nvalue;
-		new->value = nvalue;
-		printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
+		new->result = nvalue;
+		new->value = vaddr_read(nvalue, 1);
+		printf("No.%d %s %s: %d at 0x%08x\n", new->NO, new->type, new->expr, new->value, new->result);
 	}else{
 	    strcpy(new->type, "watchpoint");
 	    bool success = true;
         uint32_t result = expr(str, &success);
-	    if (success)
-		    new->value = result;
-	    else
+	    if (success){
+			new->result = result;
+		    new->value = vaddr_read(result, 1);
+		}else
 		    panic("Error:表达式出错！\n");
-        printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
+        printf("No.%d %s %s: %d at 0x%08x\n", new->NO, new->type, new->expr, new->value, new->result);
 	}
+
 	new->next = NULL;
-	new->flag = true;
 	if(head == NULL) 
 		head = new;
 	else{
@@ -99,7 +101,7 @@ void free_wp(int n){
 	    head = head->next;
 //		p2->expr = "\0";
         p2->value = 0;
-        p2->flag = false; 
+		p2->result = 0; 
 //		p2->type = NULL;
         p2->next = free_;
         free_ = p2;
@@ -110,7 +112,7 @@ void free_wp(int n){
            if(p1->NO == n){
 //		       p1->expr = "\0";
                p1->value = 0;
-               p1->flag = false;
+               p1->result = 0;
 //			   p1->type = NULL;
 			   p2->next = p1->next;
                p1->next = free_;
@@ -134,7 +136,7 @@ void print_wp(){
 	  }
 	  WP *p = head;
 	  while(p != NULL){
-		  printf("No.%d %s %s at 0x%08x\n", p->NO, p->type, p->expr, p->value);
+		  printf("No.%d %s %s: %d at 0x%08x\n", p->NO, p->type, p->expr, p->value, p->result);
 		  p = p->next;
 	  }
 	  return;
@@ -145,10 +147,9 @@ int check_wp(){
 	    WP *p = head;
 		char des[] = "watchpoint";
 	    while(p != NULL && strcmp(p->type, des) == 0){
-	        bool success = true;
-            uint32_t result = expr(p->expr, &success);
-	        if (success && (result != p->value)){
-				printf("触发监视点 %d :值由 %d 变为 %d \n", p->NO, p->value, result);
+            int new_value = vaddr_read(p->result, 1);
+	        if (new_value != p->value){
+				printf("触发监视点 %d :值由 %d 变为 %d \n", p->NO, p->value, new_value);
 				return 1;
 			}
 		    p = p->next;
