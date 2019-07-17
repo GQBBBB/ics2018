@@ -50,7 +50,7 @@ static struct rule {
   {"&&", TK_AND},        // and
   {"\\|\\|", TK_OR},     // or
 
-  {"\\$[eE][a-dsA-DS][xpiXPI]|\\$[a-dsA-DS][xpiXPI]|\\$[a-dA-D][hlHL]", TK_REG}, // 寄存器
+  {"\\$[eE][a-dsA-DSi][xpiXPI]|\\$[a-dsA-DS][xpiXPI]|\\$[a-dA-D][hlHL]", TK_REG}, // 寄存器
   {"0[xX][0-9a-fA-F]+", TK_16}, // 十六进制数
   {"[1-9][0-9]*|0", TK_10} // 十进制整数
 };
@@ -312,6 +312,9 @@ uint32_t eval(int p, int q) {
 			}
 			else if(strcmp(tokens[p].str, "$DL") == 0 || strcmp(tokens[p].str, "$dl") == 0){
 				sprintf(str1, "%8x", cpu.edx & 0xff);
+			}
+			else if(strcmp(tokens[p].str, "$eip") == 0){
+                sprintf(str1, "%8x", cpu.eip);
 			}
 			uint32_t toi = strtol(str1, &str2, 16);
 			// printf("reg: str1: %s, toi: %d\n",str1, toi);
