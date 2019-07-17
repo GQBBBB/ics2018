@@ -1,5 +1,7 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
+#include "nemu.h"
+#include <regex.h>
 
 #define NR_WP 32
 
@@ -20,6 +22,27 @@ void init_wp_pool() {
 }
 
 /* TODO: Implement the functionality of watchpoint */
+
+bool matchRegex(char* userString)
+{
+	    const char* pattern = "\\$eip==0x[0-9]{1,8}";
+	    bool result = false;
+		regex_t regex;
+	    int regexInit = regcomp(&regex, pattern, REG_EXTENDED);
+	    if(regexInit){
+		    //Error print : Compile regex failed
+		}else{
+			int reti = regexec(&regex, userString, 0, NULL, 0);
+			if(REG_NOERROR != reti){
+				//Error print: match failed! 
+			}else{
+				result = true;
+	        }
+		}
+        regfree(&regex);
+		return result;
+}
+
 WP* new_wp(char *str){
     if(!wp_flag){
 	    init_wp_pool();
@@ -36,14 +59,25 @@ WP* new_wp(char *str){
 
     strcpy(new->expr, str);
 //	printf("str address:%08x\n",*str);
-	new->type = "watchpoint";
-	bool success = true;
-    uint32_t result = expr(str, &success);
-	if (success)
-		new->value = result;
-	else
-		panic("Error:表达式出错！\n");
-
+    if(matchRegex(str)){
+		strcpy(new->type, "breakpoint");
+		char p[11] = "\0";
+		strcpy(p, str + 6);
+		int nvalue = 0;          
+		sscanf(p, "%x", &nvalue);
+		cpu.eip = nvalue;
+		new->value = nvalue;
+		printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
+	}else{
+	    strcpy(new->type, "watchpoint");
+	    bool success = true;
+        uint32_t result = expr(str, &success);
+	    if (success)
+		    new->value = result;
+	    else
+		    panic("Error:表达式出错！\n");
+        printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
+	}
 	new->next = NULL;
 	new->flag = true;
 	if(head == NULL) 
@@ -52,7 +86,7 @@ WP* new_wp(char *str){
 		new->next = head;
 	    head = new;
 	}
-	printf("No.%d %s %s at 0x%08x\n", new->NO, new->type, new->expr, new->value);
+	
 	return new;
 }
 
@@ -66,7 +100,7 @@ void free_wp(int n){
 //		p2->expr = "\0";
         p2->value = 0;
         p2->flag = false; 
-		p2->type = NULL;
+//		p2->type = NULL;
         p2->next = free_;
         free_ = p2;
 		printf("监视点 %d 已删除!\n", n);
@@ -77,7 +111,7 @@ void free_wp(int n){
 //		       p1->expr = "\0";
                p1->value = 0;
                p1->flag = false;
-			   p1->type = NULL;
+//			   p1->type = NULL;
 			   p2->next = p1->next;
                p1->next = free_;
 			   free_ = p1;
@@ -95,7 +129,7 @@ void free_wp(int n){
 
 void print_wp(){
      if(head == NULL){
-		  printf("不存在监视点!\n");
+		  printf("不存在监视点/断点!\n");
 		  return;
 	  }
 	  WP *p = head;
@@ -106,18 +140,19 @@ void print_wp(){
 	  return;
 }
 
-void check_wp(){
+int check_wp(){
     if(head != NULL){
 	    WP *p = head;
-	    while(p != NULL){
+		char des[] = "watchpoint";
+	    while(p != NULL && strcmp(p->type, des) == 0){
 	        bool success = true;
             uint32_t result = expr(p->expr, &success);
 	        if (success && (result != p->value)){
 				printf("触发监视点 %d :值由 %d 变为 %d \n", p->NO, p->value, result);
-				return;
+				return 1;
 			}
 		    p = p->next;
 	    }
 	}
-	return;
+	return 0;
 }
