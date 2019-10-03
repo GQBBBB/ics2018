@@ -22,4 +22,26 @@ make_EHelper(test); // logic.c
 make_EHelper(jcc); // control.c
 make_EHelper(leave); // data-mov.c
 make_EHelper(add); // arith.c
+make_EHelper(cmp); // arith.c
+make_EHelper(inc); // arith.c
+make_EHelper(dec); // arith.c
+make_EHelper(neg); // arith.c
+make_EHelper(adc); // arith.c
+make_EHelper(sbb); // arith.c
+make_EHelper(mul); // arith.c
+make_EHelper(imul1); // arith.c
+make_EHelper(imul2); // arith.c
+make_EHelper(imul3); // arith.c
+make_EHelper(div); // arith.c
+make_EHelper(idiv); // arith.c
+make_EHelper(and); // logic.c
+make_EHelper(or); // logic.c
+make_EHelper(sar); // logic.c
+make_EHelper(shl); // logic.c
+make_EHelper(shr); // logic.c
+make_EHelper(setcc); // logic.c
+make_EHelper(not); // logic.c
+
+
+
 
