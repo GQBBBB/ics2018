@@ -21,3 +21,5 @@ make_EHelper(jmp); // control.c
 make_EHelper(test); // logic.c
 make_EHelper(jcc); // control.c
 make_EHelper(leave); // data-mov.c
+make_EHelper(add); // arith.c
+
