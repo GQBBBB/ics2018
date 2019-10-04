@@ -48,3 +48,5 @@ make_EHelper(popa); // data-mov.c
 make_EHelper(lea); // data-mov.c
 make_EHelper(movsx); // data-mov.c
 make_EHelper(movzx); // data-mov.c
+make_EHelper(cltd); // data-mov.c
+make_EHelper(cwtl); // data-mov.c
