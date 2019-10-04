@@ -1,5 +1,5 @@
 #include "trap.h"
-
+#include <stdio.h>
 int add(int a, int b) {
 	int c = a + b;
 	return c;
@@ -15,6 +15,7 @@ int main() {
 	for(i = 0; i < NR_DATA; i ++) {
 		for(j = 0; j < NR_DATA; j ++) {
 			nemu_assert(add(test_data[i], test_data[j]) == ans[ans_idx ++]);
+			printf("%d\n", add(test_data[i], test_data[j]));
 		}
 		nemu_assert(j == NR_DATA);
 	}
