@@ -41,6 +41,7 @@ make_EHelper(shl); // logic.c
 make_EHelper(shr); // logic.c
 make_EHelper(setcc); // logic.c
 make_EHelper(not); // logic.c
+make_EHelper(rol); // logic.c
 make_EHelper(jmp_rm); // control.c
 make_EHelper(call_rm); // control.c
 make_EHelper(pusha); // data-mov.c
