@@ -155,16 +155,20 @@ static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
-  if(width == 4)
-      *dest = *src1;
-  else if(width == 2){
-	  uint16_t tmp1 = *src1;
-	  int16_t tmp2 = tmp1;
-	  *dest = tmp2;
-  }else if(width == 1){
-	  uint8_t tmp1 = *src1;
-	  int8_t tmp2 = tmp1;
-	  *dest = tmp2;
+  *dest = *src1;
+  int sign = (*src1 >> (width * 8 - 1)) & 0x1;
+  switch (width) {
+    case 1: if (sign == 1)
+				*dest |= 0xffffff00;
+	        else
+			    *dest &= 0xff;
+	        break;
+    case 2: if (sign == 1)
+				*dest |= 0xffff0000;
+	        else 
+				*dest &= 0xffff;
+	        break;
+    default: break;
   }
 }
 
