@@ -176,21 +176,20 @@ static inline void rtl_push(const rtlreg_t* src1) {
   // esp <- esp - 4
   // M[esp] <- src1
   cpu.esp -= 4;
-  vaddr_write((cpu.esp), (*src1), 4);
+  rtl_sm(&cpu.esp, src1, 4);
 }
 
 static inline void rtl_pop(rtlreg_t* dest) {
   // dest <- M[esp]
   // esp <- esp + 4
-  *dest = vaddr_read(cpu.esp, 4);
+  rtl_lm(dest, &cpu.esp, 4);
   cpu.esp += 4;
 }
 
 static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
     const rtlreg_t *src1, int imm) {
   // dest <- (src1 relop imm ? 1 : 0)
-  rtl_li(&at, imm);
-  *dest = interpret_relop(relop, *src1, at);
+  *dest = interpret_relop(relop, *src1, imm);
 }
 
 static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
@@ -213,12 +212,20 @@ make_rtl_setget_eflags(SF)
 
 static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
-  cpu.eflags.ZF = ((*result & (0xFFFFFFFF >> ((4 - width) * 8))) == 0);
+  rtlreg_t is_zero;
+  switch (width) {
+    case 1: is_zero = (*result & 0xff) == 0;
+    case 2: is_zero = (*result & 0xffff) == 0;
+    default: is_zero = (*result) == 0;
+  }
+  rtl_set_ZF(&is_zero);
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width) {
   // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
-  cpu.eflags.SF = (((*result & (0xFFFFFFFF >> ((4 - width) * 8))) & (1 << (width * 8 - 1))) != 0);
+  rtl_msb(&t0, result, width);
+  rtlreg_t is_sign = t0 != 0;
+  rtl_set_SF(&is_sign);
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width) {
