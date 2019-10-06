@@ -6,56 +6,52 @@ make_EHelper(operand_size);
 
 make_EHelper(inv);
 make_EHelper(nemu_trap);
-
-// PA2.1
-make_EHelper(call); // control.c
-make_EHelper(push); // data-mov.c
-make_EHelper(sub); // arith.c
-make_EHelper(xor); // logic.c
-make_EHelper(pop); // data-mov.c
-make_EHelper(ret); // control.c
-
-// PA2.3
-make_EHelper(nop); // special.c
-make_EHelper(jmp); // control.c
-make_EHelper(test); // logic.c
-make_EHelper(jcc); // control.c
-make_EHelper(leave); // data-mov.c
-make_EHelper(add); // arith.c
-make_EHelper(cmp); // arith.c
-make_EHelper(inc); // arith.c
-make_EHelper(dec); // arith.c
-make_EHelper(neg); // arith.c
-make_EHelper(adc); // arith.c
-make_EHelper(sbb); // arith.c
-make_EHelper(mul); // arith.c
-make_EHelper(imul1); // arith.c
-make_EHelper(imul2); // arith.c
-make_EHelper(imul3); // arith.c
-make_EHelper(div); // arith.c
-make_EHelper(idiv); // arith.c
-make_EHelper(and); // logic.c
-make_EHelper(or); // logic.c
-make_EHelper(sar); // logic.c
-make_EHelper(shl); // logic.c
-make_EHelper(shr); // logic.c
-make_EHelper(setcc); // logic.c
-make_EHelper(not); // logic.c
-make_EHelper(rol); // logic.c
-make_EHelper(jmp_rm); // control.c
-make_EHelper(call_rm); // control.c
-make_EHelper(pusha); // data-mov.c
-make_EHelper(popa); // data-mov.c
-make_EHelper(lea); // data-mov.c
-make_EHelper(movsx); // data-mov.c
-make_EHelper(movzx); // data-mov.c
-make_EHelper(cltd); // data-mov.c
-make_EHelper(cwtl); // data-mov.c
-make_EHelper(out); // system.c
-make_EHelper(in); // system.c
-make_EHelper(int); // system.c
-make_EHelper(lidt); // system.c
-make_EHelper(iret); // system.c
-make_EHelper(mov_cr2r); // system.c
-make_EHelper(mov_r2cr); // system.c
-
+make_EHelper(call);
+make_EHelper(push);
+make_EHelper(pop);
+make_EHelper(ret);
+make_EHelper(sub);
+make_EHelper(xor);
+make_EHelper(nop);
+make_EHelper(lea);
+make_EHelper(and);
+make_EHelper(add);
+make_EHelper(cmp);
+make_EHelper(setcc);
+make_EHelper(jcc);
+make_EHelper(movzx);
+make_EHelper(test);
+make_EHelper(leave);
+make_EHelper(adc);
+make_EHelper(or);
+make_EHelper(sar);
+make_EHelper(shl);
+make_EHelper(dec);
+make_EHelper(not);
+make_EHelper(inc);
+make_EHelper(imul1);
+make_EHelper(imul2);
+make_EHelper(imul3);
+make_EHelper(cwtl);
+make_EHelper(cltd);
+make_EHelper(idiv);
+make_EHelper(jmp);
+make_EHelper(movsx);
+make_EHelper(call_rm);
+make_EHelper(jmp_rm);
+make_EHelper(shr);
+make_EHelper(sbb);
+make_EHelper(in);
+make_EHelper(out);
+make_EHelper(div);
+make_EHelper(mul);
+make_EHelper(neg);
+make_EHelper(rol);
+make_EHelper(ror);
+make_EHelper(lidt);
+make_EHelper(int);
+make_EHelper(pusha);
+make_EHelper(popa);
+make_EHelper(iret);
+make_EHelper(mov_r2cr);
+make_EHelper(mov_cr2r);
