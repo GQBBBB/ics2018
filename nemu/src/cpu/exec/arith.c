@@ -7,8 +7,6 @@ make_EHelper(add) {
 
   rtl_update_ZFSF(&t2, id_dest->width);
 
-  rtl_setrelop(RELOP_LTU, &t0, &t2, &id_dest->val);
-  rtl_or(&t0, &t3, &t0);
   rtl_set_CF(&t0);
 
   rtl_xor(&t0, &id_dest->val, &id_src->val);
@@ -28,8 +26,6 @@ make_EHelper(sub) {
 
   rtl_update_ZFSF(&t2, id_dest->width);
  
-  rtl_setrelop(RELOP_LTU, &t0, &id_dest->val, &t2);
-  rtl_or(&t0, &t3, &t0);
   rtl_set_CF(&t0);
  
   rtl_xor(&t0, &id_dest->val, &id_src->val);
@@ -42,29 +38,32 @@ make_EHelper(sub) {
 }
 
 make_EHelper(cmp) {
-  rtl_sext(&t1, &id_dest->val, id_dest->width);
-  rtl_sext(&t2, &id_src->val, id_src->width);	   
-  rtl_sub(&t0, &t1, &t2);
+  rtl_sub(&t2, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &t2);
+
+  rtl_update_ZFSF(&t2, id_dest->width);
   
-  t3 = (t0 > t1);
   rtl_set_CF(&t3);
-  
-  t3 = ((((int32_t)(t1) < 0) == (((int32_t)(t2) >> 31) == 0)) && (((int32_t)(t0) < 0) != ((int32_t)(t1) < 0)));
-  rtl_set_OF(&t3);
-  
-  rtl_update_ZFSF(&t0, 4);
+
+  rtl_xor(&t0, &id_dest->val, &id_src->val);
+  rtl_xor(&t1, &id_dest->val, &t2);
+  rtl_and(&t0, &t0, &t1);
+  rtl_msb(&t0, &t0, id_dest->width);
+  rtl_set_OF(&t0);
 
   print_asm_template2(cmp);
 }
 
 make_EHelper(inc) {
-  // 不会影响进位标志
   rtl_addi(&t2, &id_dest->val, 1);
+  rtl_setrelop(RELOP_LTU, &t3, &t2, &id_dest->val);
   operand_write(id_dest, &t2);
-  
+
   rtl_update_ZFSF(&t2, id_dest->width);
-  
-  rtl_xor(&t0, &id_dest->val, &id_src->val);
+
+  rtl_set_CF(&t3);
+
+  rtl_xori(&t0, &id_dest->val, 1);
   rtl_not(&t0, &t0);
   rtl_xor(&t1, &id_dest->val, &t2);
   rtl_and(&t0, &t0, &t1);
@@ -75,13 +74,15 @@ make_EHelper(inc) {
 }
 
 make_EHelper(dec) {
-  // 不会影响进位标志
   rtl_subi(&t2, &id_dest->val, 1);
+  rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &t2);
   operand_write(id_dest, &t2);
-
+  
   rtl_update_ZFSF(&t2, id_dest->width);
+  
+  rtl_set_CF(&t3);
 
-  rtl_xor(&t0, &id_dest->val, &id_src->val);
+  rtl_xori(&t0, &id_dest->val, 1);
   rtl_xor(&t1, &id_dest->val, &t2);
   rtl_and(&t0, &t0, &t1);
   rtl_msb(&t0, &t0, id_dest->width);
@@ -92,20 +93,12 @@ make_EHelper(dec) {
 
 make_EHelper(neg) {
   // 按位取反，再加1
-  rtl_mv(&t0, &id_dest->val);
-  rtl_not(&t0, &t0);
-  rtl_addi(&t0, &t0, 1);
-  operand_write(id_dest, &t0);
+  rtl_not(&t0, &id_dest->val);
+  rtl_addi(&t1, &t0, 1);
+  operand_write(id_dest, &t1);
 
   t1 = (id_dest->val != 0);
   rtl_set_CF(&t1);
-
-  rtl_update_ZFSF(&t0, id_dest->width);
-
-  rtl_xor(&t1, &t0, &id_dest->val);
-  rtl_not(&t1, &t1);
-  rtl_msb(&t1, &t1, id_dest->width);
-  rtl_set_OF(&t1);
 
   print_asm_template1(neg);
 }

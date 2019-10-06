@@ -5,12 +5,7 @@ make_EHelper(mov) {
   print_asm_template2(mov);
 }
 
-make_EHelper(push) {
-  if(id_dest->width == 1){
-    uint8_t utmp = id_dest->val;
-	int8_t temp = utmp;
-	id_dest->val = temp;
-  }
+make_EHelper(push) { 
   rtl_push(&id_dest->val);
 
   print_asm_template1(push);
@@ -18,15 +13,7 @@ make_EHelper(push) {
 
 make_EHelper(pop) {
   rtl_pop(&t0);
-
-  if(id_dest->width == 1){
-    uint8_t utemp = t0;
-	int8_t temp = utemp; 
-	id_dest->val = temp;
-  }else 
-	id_dest->val = t0;
-
-  operand_write(id_dest,&id_src->val);
+  operand_write(id_dest, &t0);
 
   print_asm_template1(pop);
 }
@@ -59,9 +46,11 @@ make_EHelper(popa) {
 }
 
 make_EHelper(leave) {
-  // TODO();
-  rtl_mv(&cpu.esp, &cpu.ebp); // ESP = EBP
-  rtl_pop(&cpu.ebp); // EBP = pop()
+  int width = decoding.is_operand_size_16 ? 2 : 4;
+  rtl_lr(&t0, R_EBP, width);
+  rtl_sr(R_ESP, &t0, width);
+  rtl_pop(&t0);
+  rtl_sr(R_EBP, &t0, width);
 
   print_asm("leave");
 }
