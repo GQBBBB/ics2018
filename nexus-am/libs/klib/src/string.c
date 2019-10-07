@@ -17,7 +17,6 @@ char *strcpy(char* dst,const char* src) {
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
-	/*
   char* pd = dst;
   const char* ps = src;
   size_t i = 0;
@@ -26,13 +25,6 @@ char* strncpy(char* dst, const char* src, size_t n) {
   if(*pd != '\0')
 	  *pd = '\0';
   
-  return dst;*/
-  char* p_dst = dst;
-  const char* p_src = src;
-  for (size_t i = 0; i < n && *p_src; i++, p_src++, p_dst++) {
-    *p_dst = *p_src;
-  }
-  *p_dst = 0;
   return dst;	
 }
 
