@@ -41,23 +41,13 @@ int strcmp(const char* s1, const char* s2) {
 }
 
 int strncmp(const char* s1, const char* s2, size_t n) {
-	/*
   const char* p1 = s1;
   const char* p2 = s2;
-  size_t i = 0;
 
-  while(i++ < n && *p1 != '\0' && *p2 != '\0')
+  for(size_t i = 0; i < n && *p1 != '\0' && *p2 != '\0'; i++, p1++, p2++)
 	if(*p1 != *p2)
-	  return *p1++ - *p2++;
+	  return *p1 - *p2;
 
-  return 0;*/
-const char* p_s1 = s1;
-  const char* p_s2 = s2;
-  for (size_t i = 0; i < n && *p_s1 && *p_s2; i++, p_s1++, p_s2++) {
-    if (*p_s1 != *p_s2) {
-      return *p_s1 - *p_s2;
-    }
-  }
   return 0;
 }
 
