@@ -17,8 +17,6 @@ char *strcpy(char* dst,const char* src) {
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
-  assert(dst != NULL && src != NULL);
-
   char* pd = dst;
   const char* ps = src;
   size_t i = 0;
@@ -63,8 +61,6 @@ void* memset(void* v, int c, size_t n) {
 }
 
 void* memcpy(void* out, const void* in, size_t n) {
-  assert(out != NULL && in != NULL);
-
   char* po = (char*) out;
   const char* pi = (const char*) in;
   size_t i = 0;
