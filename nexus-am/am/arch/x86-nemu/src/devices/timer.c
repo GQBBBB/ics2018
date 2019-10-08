@@ -2,13 +2,13 @@
 #include <x86.h>
 #include <amdev.h>
 
-#define RTC 0x48
+#define RTC_PORT 0x48
 
 static uint32_t am_last_time;
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   static uint64_t time = 0;
-  uint32_t am_now_time = inl(RTC);
+  uint32_t am_now_time = inl(RTC_PORT);
   time = am_now_time - am_last_time;
   am_last_time = am_now_time;
   switch (reg) {
@@ -33,5 +33,5 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 }
 
 void timer_init() {
-  am_last_time = inl(RTC);
+  am_last_time = inl(RTC_PORT);
 }
