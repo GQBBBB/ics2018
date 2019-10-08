@@ -7,15 +7,15 @@
 static uint32_t am_last_time;
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
-  static uint64_t time = 0;
+  static uint64_t t = 0;
   uint32_t am_now_time = inl(RTC_PORT);
-  time = am_now_time - am_last_time;
+  t = am_now_time - am_last_time;
   am_last_time = am_now_time;
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
-      uptime->hi = (time >> 32) & 0xffffffff;
-      uptime->lo = time & 0xffffffff;
+      uptime->hi = (t >> 32) & 0xffffffff;
+      uptime->lo = t & 0xffffffff;
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
