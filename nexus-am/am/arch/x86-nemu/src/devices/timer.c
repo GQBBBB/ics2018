@@ -2,12 +2,20 @@
 #include <x86.h>
 #include <amdev.h>
 
+#define RTC 0x48
+
+static uint32_t am_last_time;
+
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
+  static uint64_t time = 0;
+  uint32_t am_now_time = inl(RTC);
+  time = am_now_time - am_last_time;
+  am_last_time = am_now_time;
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
-      uptime->hi = 0;
-      uptime->lo = 0;
+      uptime->hi = time & 0xffffffff;
+      uptime->lo = (time >> 32) & 0xffffffff;
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
@@ -25,4 +33,5 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 }
 
 void timer_init() {
+  am_last_time = inl(RTC);
 }
