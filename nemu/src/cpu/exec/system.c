@@ -2,9 +2,31 @@
 
 void difftest_skip_ref();
 void difftest_skip_dut();
+uint32_t pio_read_b(ioaddr_t addr);
+uint32_t pio_read_w(ioaddr_t addr);
+uint32_t pio_read_l(ioaddr_t addr);
+void pio_write_b(ioaddr_t addr, uint32_t data);
+void pio_write_w(ioaddr_t addr, uint32_t data);
+void pio_write_l(ioaddr_t addr, uint32_t data);
+void raise_intr(uint8_t NO, vaddr_t ret_addr);
 
 make_EHelper(lidt) {
-  TODO();
+  rtl_mv(&t0, &id_dest->addr);
+  // limit
+  rtl_lm(&t1, &t0, 2);
+  // base
+  rtl_addi(&t0, &t0, 2);
+  rtl_lm(&t2, &t0, 2);
+  rtl_addi(&t0, &t0, 2);
+  rtl_lm(&t3, &t0, 2);
+  
+  cpu.idtr.limit = t1;
+  cpu.idtr.base = (t3 << 16) | t2;
+
+  if (decoding.is_operand_size_16) {
+	// 不使用高8位
+    cpu.idtr.base &= 0xffffff;
+  }
 
   print_asm_template1(lidt);
 }
@@ -26,7 +48,7 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
+  raise_intr(id_dest->val, *eip);
 
   print_asm("int %s", id_dest->str);
 
@@ -36,7 +58,11 @@ make_EHelper(int) {
 }
 
 make_EHelper(iret) {
-  TODO();
+  rtl_pop(&decoding.jmp_eip);
+  rtl_pop(&t0);
+  cpu.cs = t0;
+  rtl_pop(&cpu.eflags.val);
+  rtl_j(decoding.jmp_eip); 
 
   print_asm("iret");
 }

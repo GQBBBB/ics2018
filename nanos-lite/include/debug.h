@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define printk(_s_, ...) printf(_s_, ## __VA_ARGS__)
+
 #define Log(format, ...) \
   printk("\33[1;35m[%s,%d,%s] " format "\33[0m\n", \
       __FILE__, __LINE__, __func__, ## __VA_ARGS__)

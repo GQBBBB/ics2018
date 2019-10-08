@@ -52,7 +52,14 @@ typedef struct {
 	  uint32_t _4: 14;
 	};
 	uint32_t val;	
-  } eflags;
+  }eflags;
+
+  uint16_t cs;
+  
+  struct {
+	uint16_t limit;
+	uint32_t base;
+  } idtr;
 
 } CPU_state;
 
