@@ -9,7 +9,7 @@ static uint32_t am_last_time;
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   static uint64_t t = 0;
   uint32_t am_now_time = inl(RTC_PORT);
-  t += am_now_time - am_last_time;
+  t = am_now_time - am_last_time;
   am_last_time = am_now_time;
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
