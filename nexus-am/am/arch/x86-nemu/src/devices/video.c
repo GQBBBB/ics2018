@@ -27,13 +27,13 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
 
 	  //                 w
 	  //  +------------------------------ x
-	  //  |==============================
+	  //  |444444444444444444444444444444
 	  //  |
 	  //  | h
 	  //  | 
 	  //  |
 	  //  y
-	  // 每次绘制一行，每个元素包含RGBA共四个字节 
+	  // 每次绘制一行，每个像素包含RGBA共四个字节 
       for(int i = 0; i < ctl->h; i++)
 	    memcpy(fb + (ctl->y + i) * screen_width() + ctl->x, ctl->pixels + i * ctl->w, ctl->w * 4);
 
