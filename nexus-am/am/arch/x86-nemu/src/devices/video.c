@@ -25,10 +25,17 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
     case _DEVREG_VIDEO_FBCTL: {
       _FBCtlReg *ctl = (_FBCtlReg *)buf;
 
-      int i;
-	  int size = screen_width() * screen_height();
-	  for(i = 0; i < size; i++)
-		  fb[i] = i;
+	  //                 w
+	  //  +------------------------------ x
+	  //  |==============================
+	  //  |
+	  //  | h
+	  //  | 
+	  //  |
+	  //  y
+	  // 每次绘制一行，每个元素包含RGBA共四个字节 
+      for(int i = 0; i < ctl->h; i++)
+	    memcpy(fb + (ctl->y + i) * screen_width() + ctl->x, ctl->pixels + i * ctl->w, ctl->w * 4);
 
       if (ctl->sync) {
         // do nothing, hardware syncs.
