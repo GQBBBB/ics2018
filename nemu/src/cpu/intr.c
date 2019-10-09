@@ -20,8 +20,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   //gatedesc.dont_care1 = vaddr_read(addr + 4, 2) & 0x7fff;
   //gatedesc.present = vaddr_read(addr + 4, 2) & 0x8000;
   //gatedesc.offset_31_16 = vaddr_read(addr + 6, 2);
-  gatedesc.valL = vaddr_read(addr, 4);
-  gatedesc.valH = vaddr_read(addr + 4, 4);
+  gatedesc.val = vaddr_read(addr, 8);
   Assert(gatedesc.present, "invalid gate descriptor!");
 
   decoding.jmp_eip = (gatedesc.offset_31_16 << 16) | gatedesc.offset_15_0;
