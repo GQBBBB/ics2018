@@ -14,15 +14,11 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   rtl_push(&ret_addr);
 
   GateDesc gatedesc;
-  vaddr_t addr = cpu.idtr.base + sizeof(GateDesc) * NO;
-  gatedesc.offset_15_0 = vaddr_read(addr, 2);
-  gatedesc.dont_care0 = vaddr_read(addr + 2, 2);
-  gatedesc.dont_care1 = vaddr_read(addr + 4, 2) & 0x7fff;
-  gatedesc.present = 1;
-  gatedesc.offset_31_16 = vaddr_read(addr + 6, 2);
-  Log("=%x", vaddr_read(addr, 8));
+  vaddr_t addr = cpu.idtr.base + NO * sizeof(GateDesc);
+  gatedesc.valL = vaddr_read(addr, 4);
+  gatedesc.valH = vaddr_read(addr + 4, 4);
   Assert(gatedesc.present, "invalid gate descriptor!");
-
+  
   decoding.jmp_eip = (gatedesc.offset_31_16 << 16) | gatedesc.offset_15_0;
   rtl_j(decoding.jmp_eip);
 }
