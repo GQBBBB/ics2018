@@ -11,23 +11,27 @@ void pio_write_l(ioaddr_t addr, uint32_t data);
 void raise_intr(uint8_t NO, vaddr_t ret_addr);
 
 make_EHelper(lidt) {
-  rtl_mv(&t0, &id_dest->addr);
+  //rtl_mv(&t0, &id_dest->addr);
   // limit
-  rtl_lm(&t1, &t0, 2);
+  //rtl_lm(&t1, &t0, 2);
   // base
-  rtl_addi(&t0, &t0, 2);
-  rtl_lm(&t2, &t0, 2);
-  rtl_addi(&t0, &t0, 2);
-  rtl_lm(&t3, &t0, 2);
+  //rtl_addi(&t0, &t0, 2);
+  //rtl_lm(&t2, &t0, 2);
+  //rtl_addi(&t0, &t0, 2);
+  //rtl_lm(&t3, &t0, 2);
   
-  cpu.idtr.limit = t1;
-  cpu.idtr.base = (t3 << 16) | t2;
+  //cpu.idtr.limit = t1;
+  //cpu.idtr.base = (t3 << 16) | t2;
 
-  if (decoding.is_operand_size_16) {
+  //if (decoding.is_operand_size_16) {
 	// 不使用高8位
-    cpu.idtr.base &= 0xffffff;
-  }
-
+    //cpu.idtr.base &= 0xffffff;
+  //}
+  rtl_li(&t0,id_dest->addr);
+  rtl_li(&t1, vaddr_read(t0, 2));
+  cpu.idtr.limit = t1;
+  rtl_li(&t2, vaddr_read(t0 + 2, 4));
+  cpu.idtr.base = t2;
   print_asm_template1(lidt);
 }
 
