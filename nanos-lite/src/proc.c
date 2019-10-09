@@ -1,5 +1,5 @@
 #include "proc.h"
-
+#include "klib.h"
 #define MAX_NR_PROC 4
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
@@ -23,6 +23,7 @@ void hello_fun(void *arg) {
 
 void init_proc() {
   naive_uload(NULL, NULL);
+  printf("init_proc\n");
 }
 
 _Context* schedule(_Context *prev) {
