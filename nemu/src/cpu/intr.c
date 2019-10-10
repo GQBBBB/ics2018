@@ -6,7 +6,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    * That is, use ``NO'' to index the IDT.
    */
 
-  Log("NO=%d", NO);
+  Log("NO=0x%x", NO);
   rtl_push(&cpu.eflags.val);
   cpu.eflags.IF = 0;
   t0 = cpu.cs;
