@@ -14,7 +14,7 @@ void sys_exit(_Context *c) {
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
-
+  Log("0x%x, 0x%x, 0x%x, 0x%x", c->GPR1 , c->GPR2, c->GPR3, c->GPR4);
   switch (a[0]) {
 	case SYS_yield: sys_yield(c); break;
 	case SYS_exit: sys_exit(c); break; 
