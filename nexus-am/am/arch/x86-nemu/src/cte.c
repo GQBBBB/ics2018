@@ -12,7 +12,7 @@ void irq0();
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
   if (user_handler) {
-    printf("irq=0x%x\n", tf->irq);
+    printf("[src/cte.c,15,irq_handle] irq=0x%x\n", tf->irq);
     _Event ev = {0};
     switch (tf->irq) { 
       case 0x81: ev.event = _EVENT_YIELD; break; 
