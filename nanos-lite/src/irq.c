@@ -3,7 +3,7 @@
 _Context* do_syscall(_Context* c);
 
 static _Context* do_event(_Event e, _Context* c) {
-  Log("EVENT=0x%x", e.event);
+  Log("EVENT_ID=0x%x", e.event);
   switch (e.event) {
     case _EVENT_YIELD: Log("receive _EVENT_YIELD event"); 
 					   break;
