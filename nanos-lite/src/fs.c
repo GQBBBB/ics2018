@@ -71,8 +71,13 @@ size_t fs_write(int fd, const void *buf, size_t len){
   Finfo *file = &file_table[fd];
   
   if (file->open_offset + len > file->size)
-	  len = file->size - file->open_offset;
-  
+	len = file->size - file->open_offset;
+
+  if (fd == 1 || fd == 2){
+    size_t std_len = serial_write(buf, file->open_offset, len);
+	return std_len;
+  }  
+
   size_t return_len = ramdisk_write(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += return_len;
 
