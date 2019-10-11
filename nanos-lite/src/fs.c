@@ -63,7 +63,7 @@ size_t fs_read(int fd, void *buf, size_t len){
   
   size_t return_len = ramdisk_read(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += return_len;
-  Log("read----------------------------");
+  
   return return_len; 
 }
 
@@ -75,7 +75,7 @@ size_t fs_write(int fd, const void *buf, size_t len){
   
   size_t return_len = ramdisk_write(buf, file->disk_offset + file->open_offset, len);
   file->open_offset += return_len;
-  Log("write-----------------------------");
+
   return return_len;
 }
 
@@ -88,7 +88,7 @@ size_t fs_lseek(int fd, size_t offset, int whence){
 	  default: assert(0);
   }
   assert(file->open_offset >= 0 && file->open_offset <= file->size);
-  Log("lseek---------------------------------");
+
   return file->open_offset;
 }
 
