@@ -20,7 +20,7 @@ void sys_exit(_Context *c) {
 
 void sys_write(_Context *c) {
   int fd = c->GPR2;
-  char *buf = (char *) c->GPR3;
+  void *buf = (void *) c->GPR3;
   size_t len = c->GPR4; 
   c->GPR1 = fs_write(fd, buf, len);
 }
@@ -39,7 +39,7 @@ void sys_brk(_Context *c) {
 
 void sys_read(_Context *c) {
   int fd = c->GPR2;
-  char *buf = (char *) c->GPR3;
+  void *buf = (void *) c->GPR3;
   size_t len = c->GPR4;
   c->GPR1 = fs_read(fd, buf, len); 
 }
