@@ -2,6 +2,7 @@
 
 size_t ramdisk_read(void* buf, size_t offset, size_t len);
 size_t ramdisk_write(const void* buf, size_t offset, size_t len);
+size_t serial_write(const void* buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -30,8 +31,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0, invalid_read, invalid_write},
-  {"stderr", 0, 0, 0, invalid_read, invalid_write},
+  {"stdout", 0, 0, 0, invalid_read, serial_write},
+  {"stderr", 0, 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 
@@ -69,11 +70,29 @@ size_t fs_read(int fd, void *buf, size_t len){
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){
-  return 0;
+  assert(fd >2);
+
+  Finfo *file = &file_table[fd];
+  
+  if (file->open_offset + len > file->size)
+	  len = file->size - file->open_offset;
+  
+  size_t return_len = ramdisk_write(buf, file->disk_offset + file->open_offset, len);
+  file->open_offset += return_len;
+
+  return return_len;
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence){
-  return 0;
+  Finfo *file = &file_table[fd];
+  switch(whence) {
+	  case SEEK_SET: file->open_offset = offset; break;
+	  case SEEK_CUR: file->open_offset += offset; break;
+	  case SEEK_END: file->open_offset = file->size + offset; break;
+	  default: assert(0);
+  }
+  assert(file->open_offset >= 0 && file->open_offset <= file->size);
+  return file->open_offset;
 }
 
 int fs_close(int fd){
