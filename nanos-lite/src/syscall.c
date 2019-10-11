@@ -65,10 +65,10 @@ _Context* do_syscall(_Context *c) {
 	case SYS_exit: sys_exit(c); break; // 0
 	case SYS_write: sys_write(c); break; // 4
 	case SYS_brk: sys_brk(c); break; // 9
-	case SYS_open: sys_open(c); break;
-	case SYS_read: sys_read(c); break;
-	case SYS_close: sys_close(c); break;
-	case SYS_lseek: sys_lseek(c); break;
+	case SYS_open: sys_open(c); break; // 2
+	case SYS_read: sys_read(c); break;  // 3
+	case SYS_close: sys_close(c); break; // 7
+	case SYS_lseek: sys_lseek(c); break; // 8
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
