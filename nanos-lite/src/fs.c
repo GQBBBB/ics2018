@@ -64,6 +64,13 @@ void init_fs() {
 size_t fs_read(int fd, void *buf, size_t len){
   Finfo *file = &file_table[fd];
   
+  // 针对特殊文件
+  if (file->read){
+    size_t std_len = file->read(buf, file->open_offset, len);
+	file->open_offset += std_len;
+	return std_len;
+  }
+
   if (file->open_offset + len > file->size)
 	  len = file->size - file->open_offset;
   
