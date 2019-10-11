@@ -3,6 +3,8 @@
 size_t ramdisk_read(void* buf, size_t offset, size_t len);
 size_t ramdisk_write(const void* buf, size_t offset, size_t len);
 size_t serial_write(const void* buf, size_t offset, size_t len);
+size_t fb_write(const void* buf, size_t offset, size_t len);
+size_t dispinfo_read(void* buf, size_t offset, size_t len);
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
@@ -33,14 +35,12 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
   {"stdout", 0, 0, 0, invalid_read, serial_write},
   {"stderr", 0, 0, 0, invalid_read, serial_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
-
-void init_fs() {
-  // TODO: initialize the size of /dev/fb
-}
 
 int fs_open(const char *pathname, int flags, int mode){
   for (int i = 0; i < NR_FILES; i++) {
@@ -53,6 +53,12 @@ int fs_open(const char *pathname, int flags, int mode){
   Log("open %s fail!", pathname);
   assert(0);
   return -1;
+}
+
+void init_fs() {
+  // TODO: initialize the size of /dev/fb
+  int fd = fs_open("/dev/fb", 0, 0);
+  file_table[fd].size = screen_width() * screen_height() * sizeof(uint32_t);
 }
 
 size_t fs_read(int fd, void *buf, size_t len){
@@ -69,8 +75,9 @@ size_t fs_read(int fd, void *buf, size_t len){
 
 size_t fs_write(int fd, const void *buf, size_t len){
   Finfo *file = &file_table[fd];
-  
-  if (fd == 1 || fd == 2){
+ 
+  // 针对特殊文件
+  if (file->write){
     size_t std_len = file->write(buf, file->open_offset, len);
 	file->open_offset += std_len;
 	return std_len;
