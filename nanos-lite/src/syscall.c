@@ -45,7 +45,6 @@ void sys_read(_Context *c) {
 }
 
 void sys_close(_Context *c) {
-  Log("closeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
   int fd = c->GPR2;
   c->GPR1 = fs_close(fd);
 }

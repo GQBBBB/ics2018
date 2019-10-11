@@ -68,7 +68,6 @@ size_t fs_read(int fd, void *buf, size_t len){
 }
 
 size_t fs_write(int fd, const void *buf, size_t len){
-  assert(fd > 2);
   Finfo *file = &file_table[fd];
   
   if (file->open_offset + len > file->size)
