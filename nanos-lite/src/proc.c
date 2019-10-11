@@ -22,7 +22,8 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-  naive_uload(NULL, NULL);
+  char *filename = "/bin/hello";
+  naive_uload(NULL, filename);
 }
 
 _Context* schedule(_Context *prev) {
