@@ -79,3 +79,13 @@ pid_t _getpid() {
   _exit(-SYS_getpid);
   return 1;
 }
+
+pid_t _fork() {
+  assert(0);
+  return 1;
+}
+
+pid_t _wait(int* wstatus) {
+  assert(0);
+  return 1;
+}
