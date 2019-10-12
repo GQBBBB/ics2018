@@ -1,5 +1,6 @@
 #include "common.h"
 #include "syscall.h"
+#include "proc.h"
 
 int mm_brk(uintptr_t new_brk);
 int fs_open(const char* pathname, int flags, int mode);
@@ -7,6 +8,7 @@ size_t fs_write(int fd, void* buf, size_t len);
 size_t fs_read(int fd, void* buf, size_t len);
 int fs_close(int fd);
 size_t fs_lseek(int fd, size_t offset, int whence);
+void naive_uload(PCB *pcb, const char *filename);
 
 void sys_yield(_Context *c) {
   _yield();
@@ -56,6 +58,13 @@ void sys_lseek(_Context *c) {
   c->GPR1 = fs_lseek(fd, offset, whence);
 }
 
+void sys_execve(_Context *c) {
+  const char *fname = (const char *)c->GPR2;
+  naive_uload(NULL, fname);
+  // 结束当前程序
+  assert(0);
+}
+
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
@@ -69,6 +78,7 @@ _Context* do_syscall(_Context *c) {
 	case SYS_read: sys_read(c); break;  // 3
 	case SYS_close: sys_close(c); break; // 7
 	case SYS_lseek: sys_lseek(c); break; // 8
+	case SYS_execve: sys_execve(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
