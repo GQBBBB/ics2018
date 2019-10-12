@@ -22,7 +22,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-  char *filename = "/bin/hello";
+  char *filename = "/bin/pal";
   naive_uload(NULL, filename);
 }
 
