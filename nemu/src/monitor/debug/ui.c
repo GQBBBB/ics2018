@@ -9,6 +9,7 @@
 
 void cpu_exec(uint64_t);
 void difftest_skip_dut();
+void difftest_skip_ref();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -141,10 +142,13 @@ static int cmd_d(char *args){
 
 static int cmd_detach(char *args){
   difftest_skip_dut();
+  difftest_skip_ref();
+  printf("已退出difftest\n");
   return 0;
 }
 
 static int cmd_attach(char *args){
+  printf("已开启difftest\n");
   return 0;
 }
 
@@ -165,7 +169,7 @@ static struct {
   { "w", "w EXPR, 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
   { "d", "d N, 删除序号为N的监视点", cmd_d},
   {"detach", "退出DiffTest模式", cmd_detach},
-  {"attach", "进入DiffTest模式", cmd_attach}
+  {"attach", "开启DiffTest模式", cmd_attach}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
