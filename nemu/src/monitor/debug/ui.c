@@ -8,6 +8,7 @@
 #include <readline/history.h>
 
 void cpu_exec(uint64_t);
+void difftest_skip_dut();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -138,6 +139,15 @@ static int cmd_d(char *args){
 	return 0;
 }
 
+static int cmd_detach(char *args){
+  difftest_skip_dut();
+  return 0;
+}
+
+static int cmd_attach(char *args){
+  return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -153,7 +163,9 @@ static struct {
   { "p", "p EXPR, 求出表达式EXPR的值", cmd_p},
   { "x", "x N EXPR, 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x}, 
   { "w", "w EXPR, 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w},
-  { "d", "d N, 删除序号为N的监视点", cmd_d}
+  { "d", "d N, 删除序号为N的监视点", cmd_d},
+  {"detach", "退出DiffTest模式", cmd_detach},
+  {"attach", "进入DiffTest模式", cmd_attach}
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

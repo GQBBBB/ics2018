@@ -11,6 +11,7 @@ static void (*ref_difftest_exec)(uint64_t n);
 
 static bool is_skip_ref;
 static bool is_skip_dut;
+static int steps = 0;
 
 void difftest_skip_ref() { is_skip_ref = true; }
 void difftest_skip_dut() { is_skip_dut = true; }
@@ -53,7 +54,7 @@ void init_difftest(char *ref_so_file, long img_size) {
 
 void difftest_step(uint32_t eip) {
   CPU_state ref_r;
-
+  printf("进入difftest_step: %d times\nis_skip_dut:%d\nis_skip_ref:%d\n", steps++, is_skip_dut, is_skip_ref);
   if (is_skip_dut) {
     is_skip_dut = false;
     return;
