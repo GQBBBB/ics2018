@@ -8,8 +8,8 @@
 #include <readline/history.h>
 
 void cpu_exec(uint64_t);
-void difftest_skip_dut();
-void difftest_skip_ref();
+void difftest_skip();
+void difftest_no_skip();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -141,13 +141,13 @@ static int cmd_d(char *args){
 }
 
 static int cmd_detach(char *args){
-  difftest_skip_dut();
-  difftest_skip_ref();
+  difftest_skip();
   printf("已退出difftest\n");
   return 0;
 }
 
 static int cmd_attach(char *args){
+  difftest_no_skip();
   printf("已开启difftest\n");
   return 0;
 }
