@@ -81,7 +81,6 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
   typedef struct {
-    uintptr_t ret;
     int argc;
     char** argv;
     char** envp;
@@ -94,9 +93,9 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   sf->argv = NULL;
   sf->envp = NULL;
 
-  cp->eip = (uintptr_t) entry;
-  cp->cs = 0x8;
   cp->prot = p;
+  cp->eip = (uintptr_t) entry;
+  cp->cs = 0x8; 
   cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
 
   return cp;
