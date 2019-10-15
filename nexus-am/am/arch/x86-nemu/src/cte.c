@@ -53,10 +53,14 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
 }
 
 _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
+  // stack存储PCB的start，end
+  // entry指向要调用函数
   _Context* cp = (_Context*) (stack.end - sizeof(_Context));
+
   cp->eip = (uintptr_t) entry;
   cp->cs = 0x8;
   cp->esp = (uintptr_t) ((void*) cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+
   return cp;
 }
 

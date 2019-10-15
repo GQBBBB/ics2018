@@ -80,5 +80,24 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
 }
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
-  return NULL;
+  typedef struct {
+    uintptr_t ret;
+    int argc;
+    char** argv;
+    char** envp;
+  } StackFrame;
+
+  _Context *cp = (_Context*) (ustack.end - sizeof(StackFrame) - sizeof(_Context));
+  StackFrame *sf = (StackFrame*) (ustack.end - sizeof(StackFrame)); 
+
+  sf->argc = 0;
+  sf->argv = NULL;
+  sf->envp = NULL;
+
+  cp->eip = (uintptr_t) entry;
+  cp->cs = 0x8;
+  cp->prot = p;
+  cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+
+  return cp;
 }
