@@ -90,7 +90,7 @@ static inline void restart() {
   cpu.cs = 0x8;
   cpu.eflags.val = 0x2;
 
-  cpu.CR0 = 0x60000011;
+  //cpu.CR0 = 0x60000011;
 }
 
 static inline void parse_args(int argc, char *argv[]) {
