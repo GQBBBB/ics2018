@@ -15,7 +15,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int len = fs_filesz(fd);
   int pgsize = pcb->as.pgsize; 
   uintptr_t base = DEFAULT_ENTRY;
-  Log("%s len:0x%x", *filename, len);
+  Log("%s len:0x%x", filename, len);
 
   // 一页一页的copy
   while (len > 0) {
