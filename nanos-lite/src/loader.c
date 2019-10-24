@@ -32,7 +32,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     len -= pgsize;
 	base += pgsize;
   }
-  pcb->cur_brk = pcb->max_brk = base;
+  pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + len;
   fs_close(fd);
 
   return DEFAULT_ENTRY;
