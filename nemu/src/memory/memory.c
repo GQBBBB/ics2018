@@ -79,10 +79,13 @@ uint32_t vaddr_read(vaddr_t addr, int len) {
   if (cpu.CR0 & CR0_PG){
 	// 数据跨越虚拟页边界, 如果这两个虚拟页被映射到两个不连续的物理页, 就需要进行两次页级地址转换
     if (OFF(addr) + len > PGSIZE) {
-      assert(0);
+      int prev_len = PGSIZE - OFF(addr);
+      int last_len = len - prev_len;
+      uint32_t prev = paddr_read(page_translate(addr), prev_len);
+      uint32_t last = paddr_read(page_translate(addr + prev_len), last_len);
+      return (last << (8 * prev_len)) | prev;
     } else {
-      paddr_t paddr = page_translate(addr);
-      return paddr_read(paddr, len);
+      return paddr_read(page_translate(addr), len);
     }
   }
 
@@ -94,8 +97,7 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
     if (OFF(addr) + len > PGSIZE) {
       assert(0);
     } else {
-      paddr_t paddr = page_translate(addr);
-      paddr_write(paddr, data, len);
+      paddr_write(page_translate(addr), data, len);
     }
   }
 
