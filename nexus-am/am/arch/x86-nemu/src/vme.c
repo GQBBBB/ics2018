@@ -1,5 +1,4 @@
 #include <x86.h>
-#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -13,14 +12,6 @@ _Area segments[] = {      // Kernel memory mappings
 };
 
 #define NR_KSEG_MAP (sizeof(segments) / sizeof(segments[0]))
-#define NR_KSEG_MAP (sizeof(segments) / sizeof(segments[0]))
-#define DIR_BITS(paddr) ((paddr >> 22) & 0x3ff)
-#define PAGE_BITS(paddr) ((paddr >> 12) & 0x3ff)
-#define OFFSET_BITS(paddr) (paddr & 0x3ff)
-#define FRAME_BITS(paddr) ((paddr >> 12) & 0xfffff)
-
-#define MAP_TEST 1
-#define MAP_CREATE 2
 
 int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
   pgalloc_usr = pgalloc_f;
@@ -85,26 +76,39 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
-  PDE *updir = (PDE *)(p->ptr);
+  // 获取页目录表基址
+  PDE *updir = (PDE *) (p->ptr);
   intptr_t vaddr = (intptr_t) va;
-  PDE pde = updir[DIR_BITS(vaddr)];
-  if (mode == MAP_CREATE) {
-    if ((pde & 0x1) == 0) {
-      PTE *upt = (PTE *)(pgalloc_usr(1));
-      pde = ((PDE)upt & 0xfffff000) | 0x1;
-      updir[DIR_BITS(vaddr)] = pde;
+  // 获取va对应页目录项
+  PDE pde = updir[PDX(vaddr)];
+  if (mode == 2) {
+	// 判断页目录项pde对应物理页是否可用
+    if ((pde & PTE_P) == 0) {// 不可用
+	  // 申请新的物理页
+      PTE *new = (PTE *)(pgalloc_usr(1));
+	  // 把该物理页赋给该页目录项
+      pde = ((PDE)new & 0xfffff000) | PTE_P;
+	  // 更新页目录项
+      updir[PDX(vaddr)] = pde;
     }
-    PTE *upt = (PTE *)(FRAME_BITS(pde) << 12);
-    PTE pte = upt[PAGE_BITS(vaddr)];
-    if ((pte & 0x1) == 0) {
-      upt[PAGE_BITS(vaddr)] = ((PTE)pa & 0xfffff000) | 0x1;
+
+    // 获取页表基址
+    PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
+	// 获取页表项
+    PTE pte = upt[PTX(vaddr)];
+	// 判断页表项pte对应物理页是否可用
+    if ((pte & PTE_P) == 0) {// 不可用
+	  // 使用物理页pa更新页表项
+      upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
     }
-  } else if (mode == MAP_TEST) {
-    if ((pde & 0x1) == 0) return 0;
+  } else if (mode == 1) {
+    if ((pde & PTE_P) == 0) 
+	  return 0;
     else {
-      PTE *upt = (PTE *)(FRAME_BITS(pde) << 12);
-      PTE pte = upt[PAGE_BITS(vaddr)];
-      if ((pte & 0x1) == 0) return 0;
+      PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
+      PTE pte = upt[PTX(vaddr)];
+      if ((pte & PTE_P) == 0) 
+		return 0;
     }
     return 1;
   }
@@ -113,22 +117,22 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
   typedef struct {
-    uintptr_t ret;
     int argc;
     char** argv;
     char** envp;
   } StackFrame;
-  StackFrame* sf = (StackFrame*)(ustack.end - sizeof(StackFrame));
+
+  _Context *cp = (_Context*) (ustack.end - sizeof(StackFrame) - sizeof(_Context));
+  StackFrame *sf = (StackFrame*) (ustack.end - sizeof(StackFrame)); 
+
   sf->argc = 0;
   sf->argv = NULL;
   sf->envp = NULL;
-  _Context* cp = (_Context*)((void*)sf - sizeof(_Context));
-  cp->eip = (uintptr_t)entry;
-  cp->cs = 0x8;
-  cp->eflags = 2;
-  cp->eflags |= 0x8;
-  cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+
   cp->prot = p;
-  *(uintptr_t *)ustack.start = (uintptr_t)cp; 
+  cp->eip = (uintptr_t) entry;
+  cp->cs = 0x8; 
+  cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+
   return cp;
 }
