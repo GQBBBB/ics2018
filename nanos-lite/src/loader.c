@@ -49,10 +49,10 @@ void context_kload(PCB *pcb, void *entry) {
   pcb->cp = _kcontext(stack, entry, NULL);
 }
 
-void context_uload(PCB *pcb, const char *filename) {
-  Log("Loadaaaaaaaaaaaaaaaaaaaaaaa");
-  _protect(&pcb->as);
-  Log("Loadddddddddddddddddddddddd");
+void context_uload(PCB *pcb, const char *filename) { 
+  Log("starrrrrrrrrrrrrrrrrrrrrrrrrr");
+  _protect(&pcb->as);Log("Loadddddddddddddddddddddddd");
+  
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
