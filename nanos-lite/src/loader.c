@@ -36,7 +36,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	if (len <= 0)
 	  segfault += 1;
   }
-  pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + fs_filesz(fd);
+  pcb->cur_brk = pcb->max_brk = base;
   fs_close(fd);
 
   return DEFAULT_ENTRY;
