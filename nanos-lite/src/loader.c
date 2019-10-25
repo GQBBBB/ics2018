@@ -16,8 +16,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int pgsize = pcb->as.pgsize; 
   uintptr_t base = DEFAULT_ENTRY;
   Log("%s len:0x%x", filename, len);
+  //int segfault = 0;
 
-  // 一页一页的copy
+  // 一页一页的copy || segfault == 1
   while (len > 0) {
 	// 申请一页空闲的物理页
     void* newpage = new_page(1);
@@ -31,8 +32,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
     len -= pgsize;
 	base += pgsize;
+
+	//if (len <= 0)
+	  //segfault += 1;
   }
-  pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + len;
+  pcb->cur_brk = pcb->max_brk = DEFAULT_ENTRY + fs_filesz(fd);
   fs_close(fd);
 
   return DEFAULT_ENTRY;
