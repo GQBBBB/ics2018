@@ -16,6 +16,7 @@ void sys_yield(_Context *c) {
 }
 
 void sys_exit(_Context *c) {
+  Log("sys_exit");
   _halt(0);
   c->GPR1 = 0;
   //naive_uload(NULL, "/bin/init");
