@@ -84,7 +84,6 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
   if (mode == 2) {
 	// 判断页目录项pde对应物理页是否可用
     if ((pde & PTE_P) == 0) {// 不可用
-	  Log("_map get a new page");
 	  // 申请新的物理页
       PTE *new = (PTE *)(pgalloc_usr(1));
 	  // 把该物理页赋给该页目录项
@@ -101,9 +100,7 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
     if ((pte & PTE_P) == 0) {// 不可用
 	  // 使用物理页pa更新页表项
       upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
-	  Log("_map update page table");
     }
-	Log("_map end");
   } else if (mode == 1) {
     if ((pde & PTE_P) == 0) 
 	  return 0;

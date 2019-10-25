@@ -23,7 +23,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     void* newpage = new_page(1);
 	// 通过_map()把这一物理页映射到用户进程的虚拟地址空间中
 	Log("Map va to pa: 0x%08x to 0x%08x", base, newpage);
-    _map(&pcb->as, (void *)base, newpage, 2);	
+    _map(&pcb->as, (void *)base, newpage, 2);
+    if(_map(&pcb->as, (void *)base, newpage, 1) == 1)
+		Log("Map 0x%08x to 0x%08x success!", base, newpage);
+	else
+		Log("Map 0x%08x to 0x%08x fail!", base, newpage);
 	// 从文件中读入一页的内容到这一物理页上
 	char buf[pgsize];
     fs_read(fd, buf, pgsize);
