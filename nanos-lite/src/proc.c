@@ -30,6 +30,7 @@ void init_proc() {
   context_uload(&pcb[0], "/bin/dummy");
   //context_uload(&pcb[1], "/bin/init");
   switch_boot_pcb();
+  Log("proc-----------------------------------------");
 }
 
 _Context* schedule(_Context *prev) {
