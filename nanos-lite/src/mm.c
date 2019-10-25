@@ -18,13 +18,12 @@ void free_page(void *p) {
 int mm_brk(uintptr_t new_brk) {
   if (current->cur_brk == 0) {
     current->cur_brk = current->max_brk = new_brk;
-  }
-  else {
+  } else {
     if (new_brk > current->max_brk) {
       uintptr_t page_start = PGROUNDUP(current->max_brk);
       uintptr_t page_end = PGROUNDUP(new_brk);
       for (; page_start <= page_end; page_start += PGSIZE) {
-        _map(&current->as, (void *)page_start, new_page());
+        _map(&current->as, (void *)page_start, new_page(1), 2);
       }
       current->max_brk = new_brk;
     }
