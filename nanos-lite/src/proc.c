@@ -41,5 +41,6 @@ _Context* schedule(_Context *prev) {
   //current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 
   // then return the new context
+  Log("schedule...............................................");
   return current->cp;
 }
