@@ -69,8 +69,9 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   return cp;
 }
 
-void _yield() {
+void _yield() {printf("11111111111111111111111111\n");
   asm volatile("int $0x81");
+  printf("2222222222222222222222\n");
 }
 
 int _intr_read() {
