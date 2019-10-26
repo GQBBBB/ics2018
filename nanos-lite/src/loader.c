@@ -25,7 +25,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Log("Map va to pa: 0x%08x to 0x%08x", base, newpage);
     _map(&pcb->as, (void *)base, newpage, 0); 
 	// 从文件中读入一页的内容到这一物理页上
-	char buf[pgsize];
+	char *buf;
     fs_read(fd, buf, pgsize);
     memcpy(newpage, buf, pgsize);
 
