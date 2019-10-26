@@ -21,7 +21,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for (uintptr_t st = DEFAULT_ENTRY; st < end; st += pgsize) {
 	// 申请一页空闲的物理页
     void* newpage = new_page(1);
-	Log("0x%08x", newpage);
+	//Log("0x%08x", newpage);
 	// 通过_map()把这一物理页映射到用户进程的虚拟地址空间中
 	Log("Map va to pa: 0x%08x to 0x%08x", st, newpage);
     _map(&pcb->as, (void *)st, newpage, 0); 
