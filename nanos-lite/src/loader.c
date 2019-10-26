@@ -14,25 +14,19 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   int len = fs_filesz(fd);
   int pgsize = pcb->as.pgsize; 
-  uintptr_t base = DEFAULT_ENTRY;
+  int end = DEFAULT_ENTRY + len;
   Log("%s len:0x%x", filename, len);
 
   // 一页一页的copy
-  while (len > 0) {
+  for (uintptr_t st = DEFAULT_ENTRY; st < end; st += pgsize) {
 	// 申请一页空闲的物理页
     void* newpage = new_page(1);
 	// 通过_map()把这一物理页映射到用户进程的虚拟地址空间中
-	Log("Map va to pa: 0x%08x to 0x%08x", base, newpage);
-    _map(&pcb->as, (void *)base, newpage, 0); 
+	Log("Map va to pa: 0x%08x to 0x%08x", st, newpage);
+    _map(&pcb->as, (void *)st, newpage, 0); 
 	// 从文件中读入一页的内容到这一物理页上
-	char *buf;
-    fs_read(fd, buf, pgsize);
-    memcpy(newpage, buf, pgsize);
-
-    len -= pgsize;
-	base += pgsize;
+    fs_read(fd, newpage, (end - st) < pgsize ? (end - st) : pgsize);
   }
-  pcb->cur_brk = pcb->max_brk = base;
   fs_close(fd);
 
   return DEFAULT_ENTRY;
