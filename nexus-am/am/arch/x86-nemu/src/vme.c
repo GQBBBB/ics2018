@@ -81,38 +81,28 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
   intptr_t vaddr = (intptr_t) va;
   // 获取va对应页目录项
   PDE pde = updir[PDX(vaddr)];
-  if (mode == 2) {
-	// 判断页目录项pde对应物理页是否可用
-    if ((pde & PTE_P) == 0) {// 不可用
-	  // 申请新的物理页
-      PTE *new = (PTE *)(pgalloc_usr(1));
-	  // 把该物理页赋给该页目录项
-      pde = ((PDE)new & 0xfffff000) | PTE_P;
-	  // 更新页目录项
-      updir[PDX(vaddr)] = pde;
-    }
 
-    // 获取页表基址
-    PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
-	// 获取页表项
-    PTE pte = upt[PTX(vaddr)];
-	// 判断页表项pte对应物理页是否可用
-    if ((pte & PTE_P) == 0) {// 不可用
-	  // 使用物理页pa更新页表项
-      upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
-    }
-  } else if (mode == 1) {
-    if ((pde & PTE_P) == 0) 
-	  return 0;
-    else {
-      PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
-      PTE pte = upt[PTX(vaddr)];
-      if ((pte & PTE_P) == 0) 
-		return 0;
-    }
-    return 1;
+  // 判断页目录项pde对应物理页是否可用
+  if ((pde & PTE_P) == 0) {// 不可用
+	// 申请新的物理页
+    PTE *new = (PTE *)(pgalloc_usr(1));
+	// 把该物理页赋给该页目录项
+    pde = ((PDE)new & 0xfffff000) | PTE_P;
+	// 更新页目录项
+    updir[PDX(vaddr)] = pde;
   }
-  return 1;
+
+  // 获取页表基址
+  PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
+  // 获取页表项
+  PTE pte = upt[PTX(vaddr)];
+  // 判断页表项pte对应物理页是否可用
+  if ((pte & PTE_P) == 0) {// 不可用
+    // 使用物理页pa更新页表项
+    upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
+  }
+
+  return 0;
 }
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
