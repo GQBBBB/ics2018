@@ -29,7 +29,8 @@ void init_proc() {
   //context_kload(&pcb[0], (void *)hello_fun);
   context_uload(&pcb[0], "/bin/dummy");
   //context_uload(&pcb[1], "/bin/init");
-  Log("1:%x", pcb[0]->cp);
+  PCB *p = &pcb[0];
+  Log("1:%x", p->cp);
   switch_boot_pcb(); 
 }
 
