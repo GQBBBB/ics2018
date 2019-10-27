@@ -36,7 +36,7 @@ current = &pcb[0];
 
 // then return the new context
 Log("3:0x%x", current->tf);
-_yield();
+
 return current->tf;
   //return NULL;
 }
