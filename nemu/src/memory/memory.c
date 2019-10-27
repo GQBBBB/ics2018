@@ -101,7 +101,6 @@ void vaddr_write(vaddr_t addr, uint32_t data, int len) {
     } else {
       paddr_write(page_translate(addr), data, len);
     }
-  }
-
-  paddr_write(addr, data, len);
+  }else 
+    paddr_write(addr, data, len);
 }
