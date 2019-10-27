@@ -33,14 +33,14 @@ void init_proc() {
 }
 
 _Context* schedule(_Context *prev) {
-  Log("1:%s", current->cp);
+  Log("1:%x", current->cp);
   // save the context pointer
   current->cp = prev;
-Log("2:%s", current->cp);
+  Log("2:%x", current->cp);
   // always select pcb[0] as the new process
   current = &pcb[0];
   //current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
-Log("3:%s", current->cp);
+  Log("3:%x", current->cp);
   // then return the new context 
   return current->cp;
 }
