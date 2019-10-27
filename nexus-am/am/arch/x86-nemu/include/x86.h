@@ -35,12 +35,12 @@
 #define PTE_D     0x040     // Dirty
 
 // GDT entries
-#define NR_SEG    6       // GDT size
+#define NR_SEG      6       // GDT size
 #define SEG_KCODE   1       // Kernel code
 #define SEG_KDATA   2       // Kernel data/stack
 #define SEG_UCODE   3       // User code
 #define SEG_UDATA   4       // User data/stack
-#define SEG_TSS   5       // Global unique task state segement
+#define SEG_TSS     5       // Global unique task state segement
 
 #define KSEL(desc) (((desc) << 3) | DPL_KERN)
 #define USEL(desc) (((desc) << 3) | DPL_USER)
@@ -57,7 +57,7 @@
 // | Page Directory |   Page Table   | Offset within Page  |
 // |      Index     |      Index     |                     |
 // +----------------+----------------+---------------------+
-//  \--- PDX(va) --/ \--- PTX(va) --/\------ OFF(va) ------/
+//  \--- PDX(va) --/ \--- PTX(va) --/ \----- OFF(va) ------/
 typedef uint32_t PTE;
 typedef uint32_t PDE;
 #define PDX(va)     (((uint32_t)(va) >> PDXSHFT) & 0x3ff)

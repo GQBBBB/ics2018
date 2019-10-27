@@ -16,11 +16,12 @@ void sys_yield(_Context *c) {
 }
 
 void sys_exit(_Context *c) {
-  //_halt(0);
-  //c->GPR1 = 0;
-  naive_uload(NULL, "/bin/init");
+  Log("sys_exit");
+  _halt(0);
+  c->GPR1 = 0;
+  //naive_uload(NULL, "/bin/init");
   // 结束当前程序
-  assert(0);
+  //assert(0);
 }
 
 void sys_write(_Context *c) {

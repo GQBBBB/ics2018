@@ -10,9 +10,11 @@ asm_trap:
   pushl $0       # for prot
 
   pushl %esp
-  call irq_handle
+  call irq_handle 
 
   addl $4, %esp
+
+  movl %eax, %esp # PA4.1 上下文切换
 
   addl $4, %esp
   popal

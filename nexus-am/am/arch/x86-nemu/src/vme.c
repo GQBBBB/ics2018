@@ -76,9 +76,53 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
+  // 获取页目录表基址
+  PDE *updir = (PDE *) (p->ptr);
+  intptr_t vaddr = (intptr_t) va;
+  // 获取va对应页目录项
+  PDE pde = updir[PDX(vaddr)];
+
+  // 判断页目录项pde对应物理页是否可用
+  if ((pde & PTE_P) == 0) {// 不可用
+	// 申请新的物理页
+    PTE *new = (PTE *)(pgalloc_usr(1));
+	// 把该物理页赋给该页目录项
+    pde = ((PDE)new & 0xfffff000) | PTE_P;
+	// 更新页目录项
+    updir[PDX(vaddr)] = pde;
+  }
+
+  // 获取页表基址
+  PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
+  // 获取页表项
+  PTE pte = upt[PTX(vaddr)];
+  // 判断页表项pte对应物理页是否可用
+  if ((pte & PTE_P) == 0) {// 不可用
+    // 使用物理页pa更新页表项
+    upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
+  }
+
   return 0;
 }
 
 _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *args) {
-  return NULL;
+  typedef struct {
+    int argc;
+    char** argv;
+    char** envp;
+  } StackFrame;
+
+  _Context *cp = (_Context*) (ustack.end - sizeof(StackFrame) - sizeof(_Context));
+  StackFrame *sf = (StackFrame*) (ustack.end - sizeof(StackFrame)); 
+
+  sf->argc = 0;
+  sf->argv = NULL;
+  sf->envp = NULL;
+
+  cp->prot = p;
+  cp->eip = (uintptr_t) entry;
+  cp->cs = 0x8; 
+  cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+
+  return cp; 
 }
