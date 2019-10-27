@@ -23,20 +23,9 @@ void hello_fun(void *arg) {
 
 void init_proc() {
   char *filename = "/bin/dummy";
-  naive_uload(&pcb[0], filename);
-  switch_boot_pcb(); 
+  naive_uload(NULL, filename);
 }
 
 _Context* schedule(_Context *prev) {
-  // save the context pointer
-current->tf = prev;
-Log("2:0x%x", current->tf);
-// always select pcb[0] as the new process
-current = &pcb[0];
-
-// then return the new context
-Log("3:0x%x", current->tf);
-
-return current->tf;
-  //return NULL;
+   return NULL;
 }
