@@ -28,7 +28,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	// 从文件中读入一页的内容到这一物理页上
     fs_read(fd, newpage, (end - st) < pgsize ? (end - st) : pgsize);
   }
-  //pcb->cur_brk = pcb->max_brk = end;
+  pcb->cur_brk = pcb->max_brk = end;
   fs_close(fd);
 
   return DEFAULT_ENTRY;
