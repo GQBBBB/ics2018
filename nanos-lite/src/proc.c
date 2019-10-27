@@ -29,12 +29,12 @@ void init_proc() {
 
 _Context* schedule(_Context *prev) {
   // save the context pointer
-current->cp = prev;
+current->tf = prev;
 
 // always select pcb[0] as the new process
 current = &pcb[0];
 
 // then return the new context
-return current->cp;
+return current->tf;
   //return NULL;
 }
