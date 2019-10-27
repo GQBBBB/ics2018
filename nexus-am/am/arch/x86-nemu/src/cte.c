@@ -13,6 +13,7 @@ void _switch(_Context *c);
 
 _Context* irq_handle(_Context *tf) {
   get_cur_as(tf);
+
   _Context *next = tf;
   if (user_handler) {
     printf("[src/cte.c,15,irq_handle] irq=0x%x\n", tf->irq);
@@ -69,7 +70,7 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   return cp;
 }
 
-void _yield() {printf("11111111111111111111111111\n");
+void _yield() {
   asm volatile("int $0x81");
   printf("2222222222222222222222\n");
 }
