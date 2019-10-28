@@ -29,6 +29,15 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	// 判断是否keydown
 	if (key & 0x8000){
 	  return_len = sprintf(buf, "kd %s\n", keyname[key & 0x1ff]);
+
+      if ((key & 0xfff) == _KEY_F1) {
+        fg_pcb = &pcb[0];
+      } else if ((key & 0xfff) == _KEY_F2) { 
+        fg_pcb = &pcb[1];
+      }else if ((key & 0xfff) == _KEY_F3) { 
+        fg_pcb = &pcb[2];
+      }
+
 	} else {
 	  return_len = sprintf(buf, "ku %s\n", keyname[key & 0x1ff]);
 	}
