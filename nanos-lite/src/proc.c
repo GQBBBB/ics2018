@@ -32,7 +32,7 @@ void init_proc() {
   context_uload(&pcb[1], "/bin/litenes");
   context_uload(&pcb[2], "/bin/slider");
   context_uload(&pcb[3], "/bin/hello");
-  fg_pcb = &pcb[3];
+  fg_pcb = 1;
   switch_boot_pcb(); 
 }
 
