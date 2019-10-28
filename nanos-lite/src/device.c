@@ -1,5 +1,6 @@
 #include "common.h"
 #include <amdev.h>
+#include "proc.h"
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   //_yield();
