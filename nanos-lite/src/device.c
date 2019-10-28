@@ -1,6 +1,5 @@
 #include "common.h"
 #include <amdev.h>
-#include "proc.h"
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   //_yield();
@@ -31,12 +30,13 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	if (key & 0x8000){
 	  return_len = sprintf(buf, "kd %s\n", keyname[key & 0x1ff]);
 
+      extern int fg_pcb;
       if ((key & 0xfff) == _KEY_F1) {
-        fg_pcb = &pcb[0];
+        fg_pcb = 1;
       } else if ((key & 0xfff) == _KEY_F2) { 
-        fg_pcb = &pcb[1];
+        fg_pcb = 2;
       }else if ((key & 0xfff) == _KEY_F3) { 
-        fg_pcb = &pcb[2];
+        fg_pcb = 3;
       }
 
 	} else {

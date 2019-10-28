@@ -4,7 +4,8 @@
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
 static PCB pcb_boot;
-PCB *current, *fg_pcb;
+PCB *current;
+int fg_pcb;
 
 void naive_uload(PCB *pcb, const char *filename);
 void context_kload(PCB *pcb, void *entry);
@@ -40,7 +41,7 @@ _Context* schedule(_Context *prev) {
   current->cp = prev;
   // always select pcb[0] as the new process
   //current = &pcb[0];
-  current = (current == &pcb[3] ? fg_pcb : &pcb[3]);
+  current = (current == &pcb[3] ? &pcb[fg_pcb - 1] : &pcb[3]);
   // then return the new context 
   return current->cp; 
 }
