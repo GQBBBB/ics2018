@@ -17,6 +17,9 @@ typedef union {
   };
 } PCB;
 
-extern PCB *current;
+extern PCB *current, *fg_pcb;
+
+#define MAX_NR_PROC 4
+extern PCB pcb[MAX_NR_PROC]; 
 
 #endif
