@@ -29,10 +29,10 @@ void init_proc() {
   //naive_uload(NULL, filename);
   //context_kload(&pcb[0], (void *)hello_fun);
   context_uload(&pcb[0], "/bin/pal"); 
-  context_uload(&pcb[1], "/bin/litenes");
-  context_uload(&pcb[2], "/bin/slider");
+  context_uload(&pcb[1], "/bin/pal");
+  context_uload(&pcb[2], "/bin/pal");
   context_uload(&pcb[3], "/bin/hello");
-  fg_pcb = 3;
+  fg_pcb = 1;
   switch_boot_pcb(); 
 }
 
