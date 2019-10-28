@@ -2,7 +2,7 @@
 #include <amdev.h>
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
-  _yield();
+  //_yield();
   const char *b = (const char *) buf;
   for (size_t i = 0; i < len; i++){
 	  _putc(b[i]);
@@ -19,7 +19,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-  _yield();
+  //_yield();
   int key = read_key();
   int return_len = 0;
   
@@ -29,6 +29,16 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	// 判断是否keydown
 	if (key & 0x8000){
 	  return_len = sprintf(buf, "kd %s\n", keyname[key & 0x1ff]);
+
+      extern int fg_pcb;
+      if ((key & 0xfff) == _KEY_F1) {
+        fg_pcb = 1;
+      } else if ((key & 0xfff) == _KEY_F2) { 
+        fg_pcb = 2;
+      }else if ((key & 0xfff) == _KEY_F3) { 
+        fg_pcb = 3;
+      }
+
 	} else {
 	  return_len = sprintf(buf, "ku %s\n", keyname[key & 0x1ff]);
 	}
@@ -51,7 +61,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  _yield();
+  //_yield();
   int x = (offset / sizeof(uint32_t)) % screen_width();
   int y = (offset / sizeof(uint32_t)) / screen_width();
   int w = len / sizeof(uint32_t);
