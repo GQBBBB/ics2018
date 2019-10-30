@@ -1,3 +1,36 @@
+# 2019-10-30
+
+- [x] PA1
+- [x] PA2
+- [x] PA3
+- [x] PA4
+
+To compile and run, run
+```bash
+cd nemu
+make clean
+cd tools/qemu-diff/
+make
+cd -
+make
+cd ..
+
+cd nexus-am/
+make clean
+make
+cd ..
+
+cd nanos-lite/
+make clean
+make update
+make
+make run
+c
+
+```
+
+---
+
 # ICS2018 Programming Assignment
 
 This project is the programming assignment of the class ICS(Introduction to Computer System) in Department of Computer Science and Technology, Nanjing University.
